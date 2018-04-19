@@ -1,17 +1,33 @@
 ###################################################################
-#### HERBIVORES, POLLINATORS, AND PLANT DEFENSES ALTER NATURAL ####
-#### SELECTION ON PLANT REPRODUCTIVE TRAITS #######################
+#### HERBIVORES AND PLANT DEFENSES AFFECT SELECTION ON PLANT ######
+#### REPRODUCTIVE TRAITS MORE STRONGLY THAN POLLINATORS ###########
 ###################################################################
 
-#Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
+# Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
+# Journal: Evolution
+# Year: 2018
+# Volume: 
+# Issue: 
+# Pages: 
 
 ###############
 #### SETUP ####
 ###############
 
-# Change directory to path of R script. Only works for Rstudio
-this.dir <- dirname(rstudioapi::getSourceEditorContext()$path)
-setwd(this.dir)
+# Clear workspace
+rm(list = ls())
+
+# Create checkpoint with package versions on date analysis was performed.
+# Will return error if R version differs.
+library(checkpoint)
+checkpoint("2018-02-10", project = getwd(), R.version = "3.4.3", 
+           checkpointLocation = "./", verbose = TRUE, 
+           forceInstall = TRUE, forceProject = TRUE)
+
+# Confirm that checkpoint worked
+getOption("repos") # SHould return MRAN mirror with date = 2018-02-10
+normalizePath(.libPaths(), winslash = "/") # Should return HPS project .checkpoint path before default system R library path
+installed.packages(.libPaths()[1])[, "Package"] # Show install packages
 
 #Load required packages
 library(Rmisc)
@@ -20,6 +36,8 @@ library(lme4)
 library(lmerTest)
 library(lsmeans)
 library(ggplot2)
+library(broom)
+library(car)
 
 #FUNCTIONS
 
@@ -36,7 +54,8 @@ CVg <- function(x,y) {
 
 
 #Load data on all plants. Re-name columns, remove dead plants, set contrasts, set factors.
-datExp <- read.table("Santangelo-Thompson-Johnson_Evolution_2018_Experimental-Data.txt", header = T,na.strings=c("NA", "#DIV/0!"), fill = T)
+Experimental.data = "HPS_data-clean/Santangelo-Thompson-Johnson_Evolution_2018_Experimental-data.txt"
+datExp <- read.table(Experimental.data, header = T,na.strings=c("NA", "#DIV/0!"), fill = T)
 datExp <- within(datExp, {
   HCN = ifelse(HCN == 0, "No", "Yes")
 })
@@ -99,7 +118,8 @@ ng1.45=theme(aspect.ratio=0.7,panel.background = element_blank(),
 ###############################################################################
 
 #Load insecticide trial dataset
-datIns<-read.table("Insecticide-trial.txt",header=T, fill = T, row.names = NULL)
+Insecticide.data = "HPS_data-clean/Santangelo-Thompson-Johnson_Evolution_2018_Insecticide-trial.txt"
+datIns <- read.table(Insecticide.data, header=T, fill = T, row.names = NULL)
 
 #Mixed model testing the effects of insecticide and molluscicide on plant biomass
 Model.Ins.Biomass <- lmer(Biomass~Molluscicide*Insecticide + (1|Parent.plant), data = datIns)
@@ -120,28 +140,30 @@ lsmeans::lsmeans(Model.Ins.Fitness, pairwise~Molluscicide * Insecticide, mode = 
 #Figure S2A: Biomass by molluscicide and insecticide
 meansBIOxMolxIns <- summarySE(datIns, measurevar = "Biomass", groupvars = c("Molluscicide","Insecticide"), na.rm = T)
 meansBIOxMolxIns$Insecticide <- factor(meansBIOxMolxIns$Insecticide, levels=c("None", "Low", "High"))
-plotBIOxMolxIns<-ggplot(meansBIOxMolxIns,aes(x=Insecticide, y=Biomass,group=Molluscicide,fill=Molluscicide))+
-  geom_bar(stat="identity", position=position_dodge(), colour="black")+
-  geom_errorbar(aes(ymin=Biomass-se,ymax=Biomass+se),position=position_dodge(width=0.9),width=0.3)+
+plotBIOxMolxIns<-ggplot(meansBIOxMolxIns,aes(x=Insecticide, y=Biomass,shape=Molluscicide,fill=Molluscicide))+
+  geom_errorbar(aes(ymin=Biomass-se,ymax=Biomass+se),position=position_dodge(width=0.5),width=0.3)+
+  geom_point(size = 3, position=position_dodge(width = 0.5))+
   xlab("Insecticide")+ylab("Mean biomass (g)")+
-  coord_cartesian(ylim=c(0,4))+scale_y_continuous(expand = c(0, 0), breaks=seq(from=0.5,to=4,by=0.5))+
-  scale_fill_manual(labels = c("No molluscicide", "Molluscicide"),values= c('#333333', '#666666'))+
+  coord_cartesian(ylim=c(2.5, 4)) + scale_y_continuous(breaks=seq(from=2.5,to=4,by=0.25))+
+  scale_shape_manual(labels = c("No molluscicide", "Molluscicide"),values=c(21, 24))+
+  scale_fill_manual(labels = c("No molluscicide", "Molluscicide"),values=c("white", "black")) +
   ng1+theme(legend.title=element_blank())
 
 #Figure S2B: Number of seeds by insecticide and molluscicide
 meansFitxMolxIns <- summarySE(datIns, measurevar = "Num.Seeds", groupvars = c("Molluscicide","Insecticide"), na.rm = T)
 meansFitxMolxIns$Insecticide <- factor(meansFitxMolxIns$Insecticide, levels=c("None", "Low", "High"))
-PlotFitxMolxIns<-ggplot(meansFitxMolxIns,aes(x=Insecticide, y=Num.Seeds,group=Molluscicide,fill=Molluscicide))+
-  geom_bar(stat="identity", position=position_dodge(), colour="black")+
-  geom_errorbar(aes(ymin=Num.Seeds-se,ymax=Num.Seeds+se),position=position_dodge(width=0.9),width=0.3)+
+PlotFitxMolxIns<-ggplot(meansFitxMolxIns,aes(x=Insecticide, y=Num.Seeds,shape=Molluscicide,fill=Molluscicide))+
+  geom_errorbar(aes(ymin=Num.Seeds-se,ymax=Num.Seeds+se),position=position_dodge(width=0.5),width=0.3)+
+  geom_point(size = 3, position=position_dodge(width = 0.5))+
   xlab("Insecticide")+ylab("Mean number of seeds")+
-  coord_cartesian(ylim=c(0,95))+scale_y_continuous(expand = c(0, 0), breaks=seq(from=0,to=95,by=20))+
-  scale_fill_manual(labels = c("No molluscicide", "Molluscicide"),values= c('#333333', '#666666'))+
+  coord_cartesian(ylim=c(20,90))+scale_y_continuous(breaks=seq(from=20,to=90,by=10))+
+  scale_shape_manual(labels = c("No molluscicide", "Molluscicide"),values=c(21, 24))+
+  scale_fill_manual(labels = c("No molluscicide", "Molluscicide"),values=c("white", "black")) +
   ng1+theme(legend.title=element_blank())
 
 # Save figures 2A and 2B to current working directory
-ggsave("Figure.S2A_Biomass.x.Ins.pdf", plot = plotBIOxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S2A_Biomass.x.Ins.pdf", plot = plotBIOxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 ############################################################################
@@ -149,16 +171,17 @@ ggsave("Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5, height
 ############################################################################
 
 #Load pollinator obervation dataset
-datPoll.obs <- read.table("Pollinator-observations.txt", header = T, fill = T, row.names = NULL)
+Pollinator.observations = "HPS_data-clean/Santangelo-Thompson-Johnson_Evolution_2018_Pollinator-observations.txt"
+datPoll.obs <- read.table(Pollinator.observations, header = T, fill = T, row.names = NULL)
 
-#LMM testing for effects of insecticide applocation on time spent foraging on plants. Control for plant display
+#LMM testing for effects of insecticide application on time spent foraging on plants. Control for plant display
 model.Poll.obs <- lmer(Time.s ~ Num.Inf + Insecticide + (1|Pollinator/Plant) + (1|Date), data = datPoll.obs)
 summary(model.Poll.obs)
 anova(model.Poll.obs, type = 3, ddf = "kenward-roger")
 
 #Effects of insecticides on visitation
 chisq.test(table(datPoll.obs$Insecticide))
-datPoll.obs %>% group_by(Insecticide) %>% summarize(count = n())
+datPoll.obs %>% group_by(Insecticide) %>% dplyr::summarize(count = n())
 
 ###########################################################
 #### SUPPLEMENTART TEXT: EFFICACY OF HAND POLLINATIONS ####
@@ -205,7 +228,7 @@ mass (g)") + ng1.45
 plotSeed.x.Trt
 
 #Save figure S3
-ggsave("Figure.S3_Fitness.x.Poll.x.Bagged.pdf", plot = plotSeed.x.Trt, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S3_Fitness.x.Poll.x.Bagged.pdf", plot = plotSeed.x.Trt, width = 5, height = 5, unit = "in", dpi = 600)
 
 ###########################
 #### HERBIVORY SURVEYS ####
@@ -293,8 +316,8 @@ plot.Herb.x.HCN <- ggplot(Summary.Herb.x.HCN,aes(x = Survey, y = Damage,shape = 
   ng1 + theme(legend.title=element_blank())
 
 # Save figures 2A and 2B to current working directory
-ggsave("Figure.2A_Herbivory.x.Insecticide_Three.Surveys.pdf", plot = plot.Herb.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.2B_Herbivory.x.HCN_Three.Surveys.pdf", plot = plot.Herb.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2A_Herbivory.x.Insecticide_Three.Surveys.pdf", plot = plot.Herb.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2B_Herbivory.x.HCN_Three.Surveys.pdf", plot = plot.Herb.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
@@ -323,14 +346,14 @@ plot.Bnr.dmg.x.Herb <- ggplot(means.bnr.dmg,aes(x = Herbivory, y = Avg.bnr.dmg))
 plot.Bnr.dmg.x.Herb
 
 #Save figure S4A
-ggsave("Figure.S4_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S4_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 #####################
 #### VOLE DAMAGE ####
 #####################
 
 #Total proportion on plants damaged by voles.
-sum(datExp$Mammal.herb)/length(datExp$Mammal.herb)
+table(datExp$Mammal.herb)[2] / sum(table(datExp$Mammal.herb)[1], table(datExp$Mammal.herb)[2])
 
 
 ########################################################
@@ -340,7 +363,8 @@ sum(datExp$Mammal.herb)/length(datExp$Mammal.herb)
 # Calculation of heritabilities and coefficients of genetic variation for traits in
 # our experiment. Done in ambient and suppressed herbivore treatments separatly. Not
 # done in pollination treatments separately since genotypes did not vary significantly
-# in response to pollination treatment (see trait models in next section)
+# in response to pollination treatment (see trait models in next section). 
+# Values are those in Table S4
 
 datExp_Amb <- subset(datExp, Herbivory == "Ambient")
 datExp_Red <- subset(datExp, Herbivory == "Reduced")
@@ -515,7 +539,7 @@ plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date
   coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 2)) + ng1
 
 # Save Figure 3D
-ggsave("Figure.3D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER WIDTH
 
@@ -560,8 +584,8 @@ plot.Bnr.wdth.x.HCN.Poll <- ggplot(means.Bnr.wdth.HCN.Poll,aes(x=HCN, y=Avg.Bnr.
                                        axis.text.x = element_text(face = "bold"))
 
 #Save figures S5 and S6A
-ggsave("Figure.S5_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.S6A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S5_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S6A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER LENGTH
 
@@ -607,8 +631,8 @@ plot.Bnr.ht.x.HCN.Poll <- ggplot(means.Bnr.ht.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Ht, 
                                      axis.text.x = element_text(face = "bold"))
 
 #Save figures 3A and S6B
-ggsave("Figure.3A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.S6B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S6B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BIOMASS
 
@@ -656,7 +680,7 @@ plot.Biomass.x.Vole <- ggplot(means.Biomass.Vole,aes(x=Voles, y=Biomass.plant))+
   coord_cartesian(ylim = c(20,50)) + scale_y_continuous(breaks = seq(from = 20, to = 50, by = 5)) +
   ng1
 
-# Figure S7: Effects of HCN, Herbivores, and pollinators on vegetative biomass
+# Effects of HCN, Herbivores, and pollinators on vegetative biomass
 means.Biomass.HCN.Herb.Poll$Pollination <- factor(means.Biomass.HCN.Herb.Poll$Pollination, levels=c("Open", "Supp"))
 means.Biomass.HCN.Herb.Poll$Herbivory <- factor(means.Biomass.HCN.Herb.Poll$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Biomass.x.Poll.Herb.HCN <- ggplot(means.Biomass.HCN.Herb.Poll,aes(x=Herbivory, y=Biomass.plant, shape = HCN, fill = HCN))+
@@ -673,8 +697,8 @@ plot.Biomass.x.Poll.Herb.HCN <- ggplot(means.Biomass.HCN.Herb.Poll,aes(x=Herbivo
                                            panel.spacing = unit(2, "lines"))
 
 #Save figures S7 and S8
-ggsave("Figure.S8_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.S7_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S8_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S7_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## NUMBER OF INFLORESCENCES
 
@@ -726,8 +750,8 @@ plot.Inflor.x.Vole.HCN <- ggplot(means.Inflor.HCN.Voles,aes(x=Voles, y=Total.Inf
   ng1 + theme(legend.title = element_blank())
 
 #Save figures 3B and 3E
-ggsave("Figure.3B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.3E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 ## NUMBER OF FLOWERS
@@ -797,8 +821,8 @@ plot.TF.x.Vole <- ggplot(means.TF.Vole,aes(x=Voles, y=Total.Seed.mass))+
   ng1
 
 #Save figures 3C and 3F
-ggsave("Figure.3C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.3F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## SEEDS PER INFLORESCENCE ##
 
@@ -822,7 +846,8 @@ rand(PL.model.T.Final)
 
 
 #Dataset for genotypic selection analysis with treatments
-GTSelnData <- read.table("GTSelnData-all_ExpTreat.txt", header = T, fill = T)
+GTseln.data <- "HPS_data-clean/Santangelo-Thompson-Johnson_Evolution_2018_GTSelnData-all_ExpTreat.txt"
+GTSelnData <- read.table(GTseln.data, header = T, fill = T)
 
 
 #Remove NA's from data
@@ -876,8 +901,8 @@ final.Global.model_GTSeln_KR
 #Write HCN multivariate selection analysis coefficients to dataset and write to disk
 final.Global.model_GTSeln_OUT <- broom::tidy(final.Global.model_GTSeln)
 final.Global.model_GTSeln_KR_OUT <- broom::tidy(final.Global.model_GTSeln_KR)
-write.csv(final.Global.model_GTSeln_OUT, "Multivariate-selection_HCN_Treatments.csv")
-write.csv(final.Global.model_GTSeln_KR_OUT, "Multivariate-selection_HCN_Treatments_KR.csv")
+write.csv(final.Global.model_GTSeln_OUT, "HPS_tables/Table-1_Gradients_Multivariate-selection_HCN_Treatments.csv")
+write.csv(final.Global.model_GTSeln_KR_OUT, "HPS_tables/Table-1_Pvals_Multivariate-selection_HCN_Treatments_Pvals.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS BASED ON SIGNIFICANT INTERACTIONS FROM ABOVE MODEL ##
 
@@ -937,7 +962,7 @@ PlotInfl.x.HCN <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResid
   ng1 + theme(legend.title = element_blank())
 
 #Save figures 4A
-ggsave("Figure.4A_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.4A_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Data subset by herbivory treatment
 GTSelnData.all.Am <- subset(GTSelnData.all, Herbivory == "Ambient")
@@ -975,7 +1000,7 @@ PlotInfl.x.Herb <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResi
   coord_cartesian(ylim = c(-2.3, 2.6)) + scale_y_continuous(breaks = seq(from = -2, to = 2.5, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("Figure.4B_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.4B_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, HERBIVORY TREATMEN AND BANNER LENGTH/WIDTH
 
@@ -1061,8 +1086,8 @@ plotBnr.lgth.Gradients <- ggplot(Bnr.lgth.Gradients, aes(x = HCN, y = Estimate, 
               axis.title.x = element_blank())
 
 #Save figures 5A and 5B
-ggsave("Figure.5A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("Figure.5B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.5A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.5B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, POLLINATION TREATMENT AND DATE TO FIRST FLOWER
 
@@ -1138,7 +1163,7 @@ plotFlwr.date.Gradients <- ggplot(Flwr.date.Gradients, aes(x = HCN, y = Estimate
               axis.line.x = element_blank(),
               axis.title.x = element_blank())
 
-ggsave("Figure.S9_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S9_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 #############################################
@@ -1146,7 +1171,8 @@ ggsave("Figure.S9_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, widt
 #############################################
 
 #Dataset for genotypic selection analysis of vole damage (name = GTSelnData-all_Voles.txt)
-GTSelnData.all.Voles <- read.table("GTSelnData-all_Voles.txt", header = T, fill = T)
+GTseln.Voles <- "HPS_data-clean/Santangelo-Thompson-Johnson_Evolution_2018_GTSelnData-all_Voles.txt"
+GTSelnData.all.Voles <- read.table(GTseln.Voles, header = T, fill = T)
 
 GTSelnData.all.Voles <- na.omit(GTSelnData.all.Voles)
 
@@ -1179,6 +1205,7 @@ final.model_GTSeln.Voles <- lmer(RF.Seed ~ Mammal.herb + HCN + Bnr.wdth.S +
 
 # Selection gradients
 summary(final.model_GTSeln.Voles)
+
 # P-values
 final.model_GTSeln.Voles_KR <- anova(final.model_GTSeln.Voles, type = 3, ddf = "Kenward-Roger")
 final.model_GTSeln.Voles_KR
@@ -1186,8 +1213,8 @@ final.model_GTSeln.Voles_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.model_GTSeln.Voles_OUT <- broom::tidy(final.model_GTSeln.Voles)
 final.model_GTSeln.Voles_KR_OUT <- broom::tidy(final.model_GTSeln.Voles_KR)
-write.csv(final.model_GTSeln.Voles_OUT, "Multivariate-selection_Voles_Treatments.csv")
-write.csv(final.model_GTSeln.Voles_KR_OUT, "Multivariate-selection_Voles_Treatments_KR.csv")
+write.csv(final.model_GTSeln.Voles_OUT, "HPS_tables/Table-S5_Gradients_Multivariate-selection_Voles_Treatments.csv")
+write.csv(final.model_GTSeln.Voles_KR_OUT, "HPS_tables/Table-S5_Pvals_Multivariate-selection_Voles_Treatments_KR.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS FROM SIGNIFICANT INTERACTION IN GT SELECTION ANALYSIS OF VOLES ##
 
@@ -1270,7 +1297,7 @@ PlotInfl.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = InflResid, y = InflFitn
   coord_cartesian(ylim = c(-1.5, 2.0)) + scale_y_continuous(breaks = seq(from = -2, to = 3.0, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("Figure.4C_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.4C_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Number of flowers Fitness residuals. Add to dataframe
 GTSelnData.all.Voles$FlwrsFitnessResid <- resid(lmer(RF.Seed ~ Mammal.herb + HCN + Bnr.wdth.S +
@@ -1298,7 +1325,7 @@ PlotFlwrs.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = FlwrsResid, y = FlwrsF
   coord_cartesian(ylim = c(-0.55, 0.5)) + scale_y_continuous(breaks = seq(from = -0.55, to = 0.5, by = 0.2)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("Figure.4D_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.4D_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 
@@ -1326,6 +1353,7 @@ final.Global.model_GTSeln_Ac <- lmer(RF.Seed ~ Glycosides.Ac + Pollination + Her
 
 # Selection gradients
 summary(final.Global.model_GTSeln_Ac)
+
 # P-values
 final.Global.model_GTSeln_Ac_KR <- anova(final.Global.model_GTSeln_Ac, type = 3, ddf = "Kenward-Roger")
 final.Global.model_GTSeln_Ac_KR
@@ -1333,8 +1361,8 @@ final.Global.model_GTSeln_Ac_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.Global.model_GTSeln_Ac_OUT <- broom::tidy(final.Global.model_GTSeln_Ac)
 final.Global.model_GTSeln_Ac_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Ac_KR)
-write.csv(final.Global.model_GTSeln_Ac_OUT, "Multivariate-selection_Ac_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "Multivariate-selection_Ac_Treatments_KR.csv")
+write.csv(final.Global.model_GTSeln_Ac_OUT, "HPS_tables/Table-S6_Gradients_Multivariate-selection_Ac_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "HPS_tables/Table-S6_Pvals_Multivariate-selection_Ac_Treatments_KR.csv")
 
 ## 3-WAY INTERACTION BETWEEN CYP79D15, POLLINATION AND DATE TO FIRST FLOWER
 
@@ -1398,6 +1426,7 @@ final.Global.model_GTSeln_Li <- lmer(RF.Seed ~ Linamarase.Li + Pollination + Her
 
 # Selection gradients
 summary(final.Global.model_GTSeln_Li)
+
 # P-values
 final.Global.model_GTSeln_Li_KR <- anova(final.Global.model_GTSeln_Li, type = 3, ddf = "Kenward-Roger")
 final.Global.model_GTSeln_Li_KR
@@ -1405,8 +1434,8 @@ final.Global.model_GTSeln_Li_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.Global.model_GTSeln_Li_OUT <- broom::tidy(final.Global.model_GTSeln_Li)
 final.Global.model_GTSeln_Li_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Li_KR)
-write.csv(final.Global.model_GTSeln_Li_OUT, "Multivariate-selection_Li_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Li_KR_OUT, "Multivariate-selection_Li_Treatments_KR.csv")
+write.csv(final.Global.model_GTSeln_Li_OUT, "HPS_tables/Table-S7_Gradients_Multivariate-selection_Li_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Li_KR_OUT, "HPS_tables/Table-S7_Pvals_Multivariate-selection_Li_Treatments_KR.csv")
 
 ##########################################################
 #### FIGURE SUMMARIZING SELECTION BY DIFFERENT AGENTS ####
@@ -1498,5 +1527,5 @@ plotAgent.Med.Sel <- ggplot(AgentMedSel, aes(x = Agent, y = Gradient, group = Tr
   ng1 + theme(legend.title=element_blank())
 plotAgent.Med.Sel
 
-ggsave("Figure.6_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.6_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
 
