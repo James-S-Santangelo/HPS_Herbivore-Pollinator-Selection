@@ -1,0 +1,1 @@
+This directory contains datasets as plain text files. The datasets have been processes and are not to be modified. They are read directly into the analysis pipeline using the _../HPS_Scripts/Santangelo-Thompson-Johnson_Evolution_2018.R_ script.
