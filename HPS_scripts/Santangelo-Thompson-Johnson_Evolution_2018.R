@@ -902,7 +902,7 @@ final.Global.model_GTSeln_KR
 final.Global.model_GTSeln_OUT <- broom::tidy(final.Global.model_GTSeln)
 final.Global.model_GTSeln_KR_OUT <- broom::tidy(final.Global.model_GTSeln_KR)
 write.csv(final.Global.model_GTSeln_OUT, "HPS_tables/Table-1_Gradients_Multivariate-selection_HCN_Treatments.csv")
-write.csv(final.Global.model_GTSeln_KR_OUT, "HPS_tables/Table-1_Pvals_Multivariate-selection_HCN_Treatments_Pvals.csv")
+write.csv(final.Global.model_GTSeln_KR_OUT, "HPS_tables/Table-1_Pvals_Multivariate-selection_HCN_Treatments.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS BASED ON SIGNIFICANT INTERACTIONS FROM ABOVE MODEL ##
 
@@ -1214,7 +1214,7 @@ final.model_GTSeln.Voles_KR
 final.model_GTSeln.Voles_OUT <- broom::tidy(final.model_GTSeln.Voles)
 final.model_GTSeln.Voles_KR_OUT <- broom::tidy(final.model_GTSeln.Voles_KR)
 write.csv(final.model_GTSeln.Voles_OUT, "HPS_tables/Table-S5_Gradients_Multivariate-selection_Voles_Treatments.csv")
-write.csv(final.model_GTSeln.Voles_KR_OUT, "HPS_tables/Table-S5_Pvals_Multivariate-selection_Voles_Treatments_KR.csv")
+write.csv(final.model_GTSeln.Voles_KR_OUT, "HPS_tables/Table-S5_Pvals_Multivariate-selection_Voles_Treatments.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS FROM SIGNIFICANT INTERACTION IN GT SELECTION ANALYSIS OF VOLES ##
 
@@ -1362,7 +1362,7 @@ final.Global.model_GTSeln_Ac_KR
 final.Global.model_GTSeln_Ac_OUT <- broom::tidy(final.Global.model_GTSeln_Ac)
 final.Global.model_GTSeln_Ac_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Ac_KR)
 write.csv(final.Global.model_GTSeln_Ac_OUT, "HPS_tables/Table-S6_Gradients_Multivariate-selection_Ac_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "HPS_tables/Table-S6_Pvals_Multivariate-selection_Ac_Treatments_KR.csv")
+write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "HPS_tables/Table-S6_Pvals_Multivariate-selection_Ac_Treatments.csv")
 
 ## 3-WAY INTERACTION BETWEEN CYP79D15, POLLINATION AND DATE TO FIRST FLOWER
 
@@ -1435,7 +1435,7 @@ final.Global.model_GTSeln_Li_KR
 final.Global.model_GTSeln_Li_OUT <- broom::tidy(final.Global.model_GTSeln_Li)
 final.Global.model_GTSeln_Li_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Li_KR)
 write.csv(final.Global.model_GTSeln_Li_OUT, "HPS_tables/Table-S7_Gradients_Multivariate-selection_Li_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Li_KR_OUT, "HPS_tables/Table-S7_Pvals_Multivariate-selection_Li_Treatments_KR.csv")
+write.csv(final.Global.model_GTSeln_Li_KR_OUT, "HPS_tables/Table-S7_Pvals_Multivariate-selection_Li_Treatments.csv")
 
 ##########################################################
 #### FIGURE SUMMARIZING SELECTION BY DIFFERENT AGENTS ####
