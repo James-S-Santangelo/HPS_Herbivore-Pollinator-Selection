@@ -6,9 +6,9 @@
 # Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
 # Journal: Evolution
 # Year: 2018
-# Volume: 
-# Issue: 
-# Pages: 
+# Volume:
+# Issue:
+# Pages:
 
 ###############
 #### SETUP ####
@@ -18,10 +18,11 @@
 rm(list = ls())
 
 # Create checkpoint with package versions on date analysis was performed.
+# Install packages and dependencies in project root.
 # Will return error if R version differs.
 library(checkpoint)
-checkpoint("2018-02-10", project = getwd(), R.version = "3.4.3", 
-           checkpointLocation = "./", verbose = TRUE, 
+checkpoint("2018-02-10", project = getwd(), R.version = "3.4.3",
+           checkpointLocation = "./", verbose = TRUE,
            forceInstall = TRUE, forceProject = TRUE)
 
 # Confirm that checkpoint worked
@@ -363,7 +364,7 @@ table(datExp$Mammal.herb)[2] / sum(table(datExp$Mammal.herb)[1], table(datExp$Ma
 # Calculation of heritabilities and coefficients of genetic variation for traits in
 # our experiment. Done in ambient and suppressed herbivore treatments separatly. Not
 # done in pollination treatments separately since genotypes did not vary significantly
-# in response to pollination treatment (see trait models in next section). 
+# in response to pollination treatment (see trait models in next section).
 # Values are those in Table S4
 
 datExp_Amb <- subset(datExp, Herbivory == "Ambient")
