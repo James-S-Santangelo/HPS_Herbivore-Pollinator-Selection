@@ -20,6 +20,7 @@ rm(list = ls())
 # Create checkpoint with package versions on date analysis was performed.
 # Install packages and dependencies in project root.
 # Will return error if R version differs.
+# R v.3.4.3 source code can be downloaded from https://cran.rstudio.com/
 library(checkpoint)
 checkpoint("2018-02-10", project = getwd(), R.version = "3.4.3",
            checkpointLocation = "./", verbose = TRUE,
