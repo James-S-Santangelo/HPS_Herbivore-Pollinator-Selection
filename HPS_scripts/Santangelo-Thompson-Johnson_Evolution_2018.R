@@ -243,16 +243,22 @@ datExp %>% group_by(Herbivory) %>% summarize(n = sum(!is.na(Leaf.avg.dmg.1)))
 modelHerb.1 <- lmer(Leaf.avg.dmg.1~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
 anova(modelHerb.1, type = 3, ddf = 'kenward-roger')
 summary(modelHerb.1)
+Tukey_modelHerb.1 <- lsmeans::lsmeans(modelHerb.1, pairwise~HCN*Herbivory, mode = "kenward-roger")
+lsmeans::cld(Tukey_modelHerb.1)
 
 #Survey 2
 modelHerb.2 <- lmer(Leaf.avg.dmg.2~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
 anova(modelHerb.2, type = 3, ddf = 'kenward-roger')
 summary(modelHerb.2)
+Tukey_modelHerb.2 <- lsmeans::lsmeans(modelHerb.2, pairwise~HCN*Herbivory, mode = "kenward-roger")
+lsmeans::cld(Tukey_modelHerb.2)
 
 #Survey 3
 modelHerb.3 <- lmer(Leaf.avg.dmg.3~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
 anova(modelHerb.3, type = 3, ddf = 'kenward-roger')
 summary(modelHerb.3)
+Tukey_modelHerb.3 <- lsmeans::lsmeans(modelHerb.3, pairwise~HCN*Herbivory, mode = "kenward-roger")
+lsmeans::cld(Tukey_modelHerb.3)
 
 #3 surveys combined
 datExp$Leaf.avg.dmg.All <- (datExp$Leaf.avg.dmg.1 + datExp$Leaf.avg.dmg.2 + datExp$Leaf.avg.dmg.3)/3
@@ -297,15 +303,15 @@ plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,s
   geom_point(size = 4.5)+
   facet_wrap(  ~ Survey) + 
   xlab("HCN")+ylab("% Herbivore damage")+
-  coord_cartesian(ylim = c(2,18.5))+
-  scale_y_continuous(breaks = seq(from = 2, to = 18, by = 2))+
+  coord_cartesian(ylim = c(1.5,20))+
+  scale_y_continuous(breaks = seq(from = 2, to = 20, by = 2))+
   scale_shape_manual(labels = c("Ambient herbivory", "Reduced herbivory"),values=c(22, 23))+
   scale_fill_manual(labels = c("Ambient herbivory", "Reduced herbivory"),values=c("white", "black")) +
   ng1 + theme(aspect.ratio=1.0, legend.title=element_blank())
 plot.Herb.x.Herb_HCN
 
 # Save figures 2A and 2B to current working directory
-ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 7, height = 7, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 7, height = 8, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
