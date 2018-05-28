@@ -17,10 +17,9 @@ rm(list = ls())
 
 # Create checkpoint with package versions on date analysis was performed.
 # Install packages and dependencies in project root.
-# Will return error if R version differs.
-# R v.3.4.3 source code can be downloaded from https://cran.rstudio.com/
+# Run using R v.3.4.3.
 library(checkpoint)
-checkpoint("2018-02-10", project = getwd(), R.version = "3.4.3",
+checkpoint("2018-02-10", project = getwd(),
            checkpointLocation = "./", verbose = TRUE,
            forceInstall = TRUE, forceProject = TRUE)
 
@@ -278,7 +277,7 @@ mean(datHerb$Damage, na.rm = T)/sqrt(sd(datHerb$Damage, na.rm = T))
 
 
 #Means for herbivory surveys
-Summary.Herb.x.Herb <- summarySE(datHerb, measurevar = "Damage", groupvar = c("Herbivory","Survey"), na.rm = T)
+Summary.Herb.x.Herb_HCN <- summarySE(datHerb, measurevar = "Damage", groupvar = c("HCN", "Herbivory","Survey"), na.rm = T)
 Summary.Herb.x.HCN <- summarySE(datHerb, measurevar = "Damage", groupvar = c("HCN","Survey"), na.rm = T)
 
 #Effect sizes (% change). Values from means datasets above
@@ -289,35 +288,24 @@ Summary.Herb.x.HCN <- summarySE(datHerb, measurevar = "Damage", groupvar = c("HC
 (11.370633 - 8.408081)/11.370633 # HCN, Late
 (7.563038 - 5.270025)/7.563038 # HCN, Mid
 
-#Figure 2A. Plot mean damage for Ambient and reduced herbivory plants from all 3 survey on same figure.
-Summary.Herb.x.Herb$Survey <- as.character(Summary.Herb.x.HCN$Survey)
-Summary.Herb.x.Herb$Survey <- factor(Summary.Herb.x.Herb$Survey, levels=c("Early","Mid","Late"))
-plot.Herb.x.Herb <- ggplot(Summary.Herb.x.Herb,aes(x = Survey, y = Damage,shape = Herbivory,fill = Herbivory))+
-  geom_errorbar(aes(ymin=Damage-se,ymax=Damage+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
-  geom_point(size = 4.5, position = position_dodge(width = 0.5))+
-  xlab("Survey")+ylab("% Herbivore damage")+
-  coord_cartesian(ylim = c(3.5,16.5))+
-  scale_y_continuous(breaks = seq(from = 4, to = 16, by = 2))+
+#Figure 2. Plot mean damage across HCN and Herbivory for each survey. 
+Summary.Herb.x.Herb_HCN$Survey <- as.character(Summary.Herb.x.Herb_HCN$Survey)
+Summary.Herb.x.Herb_HCN$Survey <- factor(Summary.Herb.x.Herb_HCN$Survey, levels=c("Early","Mid","Late"))
+plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,shape = Herbivory,fill = Herbivory, group = Herbivory))+
+  geom_errorbar(aes(ymin=Damage-se,ymax=Damage+se),width=0.15,size=0.7)+
+  geom_line(size = 1, aes(linetype = Herbivory)) + 
+  geom_point(size = 4.5)+
+  facet_wrap(  ~ Survey) + 
+  xlab("HCN")+ylab("% Herbivore damage")+
+  coord_cartesian(ylim = c(2,18.5))+
+  scale_y_continuous(breaks = seq(from = 2, to = 18, by = 2))+
   scale_shape_manual(labels = c("Ambient herbivory", "Reduced herbivory"),values=c(22, 23))+
   scale_fill_manual(labels = c("Ambient herbivory", "Reduced herbivory"),values=c("white", "black")) +
-  ng1 + theme(legend.title=element_blank())
-
-#Figure 2B. Plot mean damage for HCN+ and HCN- plants from all 3 survey on same figure.
-Summary.Herb.x.HCN$Survey <- as.character(Summary.Herb.x.HCN$Survey)
-Summary.Herb.x.HCN$Survey <- factor(Summary.Herb.x.HCN$Survey, levels=c("Early","Mid","Late"))
-plot.Herb.x.HCN <- ggplot(Summary.Herb.x.HCN,aes(x = Survey, y = Damage,shape = HCN,fill = HCN))+
-  geom_errorbar(aes(ymin=Damage-se,ymax=Damage+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
-  geom_point(size = 4.5, position = position_dodge(width = 0.5))+
-  xlab("Survey")+ylab("% Herbivore damage")+
-  coord_cartesian(ylim = c(5,13))+
-  scale_y_continuous(breaks = seq(from = 5, to = 13, by = 1))+
-  scale_shape_manual(labels = c("HCN-", "HCN+"),values=c(24, 21))+
-  scale_fill_manual(labels = c("HCN-", "HCN+"),values=c("white", "black")) +
-  ng1 + theme(legend.title=element_blank())
+  ng1 + theme(aspect.ratio=1.0, legend.title=element_blank())
+plot.Herb.x.Herb_HCN
 
 # Save figures 2A and 2B to current working directory
-ggsave("HPS_figures/Figure.2A_Herbivory.x.Insecticide_Three.Surveys.pdf", plot = plot.Herb.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.2B_Herbivory.x.HCN_Three.Surveys.pdf", plot = plot.Herb.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 7, height = 7, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
