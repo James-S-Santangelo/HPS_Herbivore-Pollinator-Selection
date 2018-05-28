@@ -311,7 +311,7 @@ plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,s
 plot.Herb.x.Herb_HCN
 
 # Save figures 2A and 2B to current working directory
-ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 7, height = 8, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 10, height = 8, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
