@@ -1,9 +1,7 @@
 ###################################################################
 #### HERBIVORES AND PLANT DEFENSES AFFECT SELECTION ON PLANT ######
 #### REPRODUCTIVE TRAITS MORE STRONGLY THAN POLLINATORS ###########
-###################################################################
-
-# Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
+#################################################################### Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
 # Journal: Evolution
 # Year: 2018
 # Volume:
