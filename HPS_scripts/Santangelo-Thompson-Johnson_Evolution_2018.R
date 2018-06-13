@@ -1,8 +1,10 @@
 ###################################################################
 #### HERBIVORES AND PLANT DEFENSES AFFECT SELECTION ON PLANT ######
 #### REPRODUCTIVE TRAITS MORE STRONGLY THAN POLLINATORS ###########
-#################################################################### Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
-# Journal: Evolution
+#################################################################### 
+
+# Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
+# Journal: Journal of Evolutionary Biology
 # Year: 2018
 # Volume:
 # Issue:
@@ -12,31 +14,36 @@
 #### SETUP ####
 ###############
 
+# Restart R
+.rs.restartR()
 # Clear workspace
 rm(list = ls())
 
 # Create checkpoint with package versions on date analysis was performed.
 # Install packages and dependencies in project root.
 # Run using R v.3.4.3.
+# Checkpoint will ask to create directory. Answer 'y'. 
+# Do not proceed with running remaining code until this directory is created.
 library(checkpoint)
 checkpoint("2018-02-10", project = getwd(),
-           checkpointLocation = "./", verbose = TRUE,
-           forceInstall = TRUE, forceProject = TRUE)
+           checkpointLocation = "./", verbose = TRUE, 
+           forceProject = TRUE)
 
 # Confirm that checkpoint worked
 getOption("repos") # SHould return MRAN mirror with date = 2018-02-10
 normalizePath(.libPaths(), winslash = "/") # Should return HPS project .checkpoint path before default system R library path
-installed.packages(.libPaths()[1])[, "Package"] # Show install packages
+installed.packages(.libPaths()[1])[, "Package"] # Show installed packages
 
 #Load required packages
 library(Rmisc)
-library(dplyr)
 library(lme4)
 library(lmerTest)
+library(dplyr)
 library(lsmeans)
 library(ggplot2)
 library(broom)
 library(car)
+library(multcompView)
 
 #FUNCTIONS
 
@@ -294,7 +301,7 @@ Summary.Herb.x.HCN <- summarySE(datHerb, measurevar = "Damage", groupvar = c("HC
 (11.370633 - 8.408081)/11.370633 # HCN, Late
 (7.563038 - 5.270025)/7.563038 # HCN, Mid
 
-#Figure 2. Plot mean damage across HCN and Herbivory for each survey. 
+#Figure S4. Plot mean damage across HCN and Herbivory for each survey. 
 Summary.Herb.x.Herb_HCN$Survey <- as.character(Summary.Herb.x.Herb_HCN$Survey)
 Summary.Herb.x.Herb_HCN$Survey <- factor(Summary.Herb.x.Herb_HCN$Survey, levels=c("Early","Mid","Late"))
 plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,shape = Herbivory,fill = Herbivory, group = Herbivory))+
@@ -310,8 +317,8 @@ plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,s
   ng1 + theme(aspect.ratio=1.0, legend.title=element_blank())
 plot.Herb.x.Herb_HCN
 
-# Save figures 2A and 2B to current working directory
-ggsave("HPS_figures/Figure.2_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 10, height = 8, unit = "in", dpi = 600)
+# Save figures S4 to current working directory
+ggsave("HPS_figures/Figure.S4_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 10, height = 8, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
@@ -329,7 +336,7 @@ anova(model.bnr.dmg, type = 3, ddf = "kenward-roger")
 means.bnr.dmg <- summarySE(datExp, measurevar = "Avg.bnr.dmg", groupvars = "Herbivory", na.rm = TRUE)
 (41.58122 - 14.90667)/41.58122 #ES
 
-#Figure S4A: Banner petal damage for pesticide treated and untreated plants
+#Figure S5A: Banner petal damage for pesticide treated and untreated plants
 means.bnr.dmg$Herbivory <- factor(means.bnr.dmg$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Bnr.dmg.x.Herb <- ggplot(means.bnr.dmg,aes(x = Herbivory, y = Avg.bnr.dmg))+
   geom_errorbar(aes(ymin=Avg.bnr.dmg-se,ymax=Avg.bnr.dmg+se),width=0.15,size=0.7)+
@@ -339,8 +346,8 @@ plot.Bnr.dmg.x.Herb <- ggplot(means.bnr.dmg,aes(x = Herbivory, y = Avg.bnr.dmg))
   ng1 + theme(legend.title=element_blank())
 plot.Bnr.dmg.x.Herb
 
-#Save figure S4A
-ggsave("HPS_figures/Figure.S4_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figure S5
+ggsave("HPS_figures/Figure.S5_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 #####################
 #### VOLE DAMAGE ####
@@ -358,7 +365,7 @@ table(datExp$Mammal.herb)[2] / sum(table(datExp$Mammal.herb)[1], table(datExp$Ma
 # our experiment. Done in ambient and suppressed herbivore treatments separatly. Not
 # done in pollination treatments separately since genotypes did not vary significantly
 # in response to pollination treatment (see trait models in next section).
-# Values are those in Table S4
+# Values are those in Table S3
 
 datExp_Amb <- subset(datExp, Herbivory == "Ambient")
 datExp_Red <- subset(datExp, Herbivory == "Reduced")
@@ -524,7 +531,7 @@ means.Flwr.date.Vole <- within(means.Flwr.date.Vole, {
 means.Flwr.date.Herb <- summarySE(datExp, measurevar = "Flower.date", groupvars = "Herbivory", na.rm = T)
 36.71031 - 30.84570 # ES
 
-#Figure 3D. Effects of voles on flowering date
+#Figure 2D. Effects of voles on flowering date
 means.Flwr.date.Vole$Voles <- factor(means.Flwr.date.Vole$Voles, levels=c("Undamaged", "Damaged"))
 plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date)) +
   geom_errorbar(aes(ymin=Flower.date-se,ymax=Flower.date+se),width=0.15,size=0.7) +
@@ -532,8 +539,8 @@ plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date
   xlab("Vole damage") + ylab("Days to first flower") +
   coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 2)) + ng1
 
-# Save Figure 3D
-ggsave("HPS_figures/Figure.3D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+# Save Figure 2D
+ggsave("HPS_figures/Figure.2D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER WIDTH
 
@@ -556,7 +563,7 @@ means.Bnr.wdth.Herb <- summarySE(datExp, measurevar = "Avg.Bnr.Wdth", groupvars 
 #Dataset for plotting effect of HCN and pollinators Banner width
 means.Bnr.wdth.HCN.Poll <- summarySE(datExp, measurevar = "Avg.Bnr.Wdth", groupvars = c("HCN","Pollination"), na.rm = T)
 
-#Figure S5: Effects of herbivores on Banner width
+#Figure S6: Effects of herbivores on Banner width
 plot.Bnr.wdth.x.Herb <- ggplot(means.Bnr.wdth.Herb,aes(x=Herbivory, y=Avg.Bnr.Wdth))+
   geom_errorbar(aes(ymin=Avg.Bnr.Wdth-se,ymax=Avg.Bnr.Wdth+se),width=0.15,size=0.7)+
   geom_point(size=4.5)+
@@ -564,7 +571,7 @@ plot.Bnr.wdth.x.Herb <- ggplot(means.Bnr.wdth.Herb,aes(x=Herbivory, y=Avg.Bnr.Wd
   coord_cartesian(ylim = c(3.185,3.275)) + scale_y_continuous(breaks = seq(from = 3.19, to = 3.27, by = 0.02)) +
   ng1
 
-#Figure S6A: Effects of HCN and pollinators on banner width
+#Figure S7A: Effects of HCN and pollinators on banner width
 plot.Bnr.wdth.x.HCN.Poll <- ggplot(means.Bnr.wdth.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Wdth, shape = Pollination, fill = Pollination))+
   geom_errorbar(aes(ymin=Avg.Bnr.Wdth-se,ymax=Avg.Bnr.Wdth+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
   geom_point(size=4.5,position = position_dodge(width = 0.5))+
@@ -577,9 +584,9 @@ plot.Bnr.wdth.x.HCN.Poll <- ggplot(means.Bnr.wdth.HCN.Poll,aes(x=HCN, y=Avg.Bnr.
                                        axis.title.x = element_blank(),
                                        axis.text.x = element_text(face = "bold"))
 
-#Save figures S5 and S6A
-ggsave("HPS_figures/Figure.S5_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S6A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures S6 and S7A
+ggsave("HPS_figures/Figure.S6_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S7A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER LENGTH
 
@@ -603,7 +610,7 @@ means.Bnr.ht.Herb <- summarySE(datExp, measurevar = "Avg.Bnr.Ht", groupvars = "H
 #Dataset for plotting effect of HCN and pollinators Banner length
 means.Bnr.ht.HCN.Poll <- summarySE(datExp, measurevar = "Avg.Bnr.Ht", groupvars = c("Pollination","HCN"), na.rm = T)
 
-#Figure 3A: Effects of herbivores on Banner length
+#Figure 2A: Effects of herbivores on Banner length
 means.Bnr.ht.Herb$Herbivory <- factor(means.Bnr.ht.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Bnr.ht.x.Herb <- ggplot(means.Bnr.ht.Herb,aes(x=Herbivory, y=Avg.Bnr.Ht))+
   geom_errorbar(aes(ymin=Avg.Bnr.Ht-se,ymax=Avg.Bnr.Ht+se),width=0.15,size=0.7)+
@@ -611,7 +618,7 @@ plot.Bnr.ht.x.Herb <- ggplot(means.Bnr.ht.Herb,aes(x=Herbivory, y=Avg.Bnr.Ht))+
   xlab("Herbivory")+ylab("Banner length (mm)") +
   ng1
 
-#Figure S6B: Effects of HCN and Pollinators on banner length
+#Figure S7B: Effects of HCN and Pollinators on banner length
 plot.Bnr.ht.x.HCN.Poll <- ggplot(means.Bnr.ht.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Ht, shape = Pollination, fill = Pollination))+
   geom_errorbar(aes(ymin=Avg.Bnr.Ht-se,ymax=Avg.Bnr.Ht+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
   geom_point(size=4.5,position = position_dodge(width = 0.5))+
@@ -624,9 +631,9 @@ plot.Bnr.ht.x.HCN.Poll <- ggplot(means.Bnr.ht.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Ht, 
                                      axis.title.x = element_blank(),
                                      axis.text.x = element_text(face = "bold"))
 
-#Save figures 3A and S6B
-ggsave("HPS_figures/Figure.3A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S6B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures 2A and S7B
+ggsave("HPS_figures/Figure.2A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S7B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BIOMASS
 
@@ -666,15 +673,7 @@ means.Biomass.Vole <- within(means.Biomass.Vole, {
 #Dataset for plotting effect of HCN, herbivores, and pollinators on biomass
 means.Biomass.HCN.Herb.Poll <- summarySE(datExp, measurevar = "Biomass.plant", groupvars = c("Herbivory","HCN","Pollination"), na.rm = T)
 
-#Figure S8. Effects of vole damage on vegetative biomass
-plot.Biomass.x.Vole <- ggplot(means.Biomass.Vole,aes(x=Voles, y=Biomass.plant))+
-  geom_errorbar(aes(ymin=Biomass.plant-se,ymax=Biomass.plant+se),width=0.15,size=0.7)+
-  geom_point(size=4.5)+
-  xlab("Vole damage")+ylab("Biomass (mg)") +
-  coord_cartesian(ylim = c(20,50)) + scale_y_continuous(breaks = seq(from = 20, to = 50, by = 5)) +
-  ng1
-
-# Effects of HCN, Herbivores, and pollinators on vegetative biomass
+# Figure S8: Effects of HCN, Herbivores, and pollinators on vegetative biomass
 means.Biomass.HCN.Herb.Poll$Pollination <- factor(means.Biomass.HCN.Herb.Poll$Pollination, levels=c("Open", "Supp"))
 means.Biomass.HCN.Herb.Poll$Herbivory <- factor(means.Biomass.HCN.Herb.Poll$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Biomass.x.Poll.Herb.HCN <- ggplot(means.Biomass.HCN.Herb.Poll,aes(x=Herbivory, y=Biomass.plant, shape = HCN, fill = HCN))+
@@ -686,13 +685,21 @@ plot.Biomass.x.Poll.Herb.HCN <- ggplot(means.Biomass.HCN.Herb.Poll,aes(x=Herbivo
   scale_fill_manual(labels = c("HCN-","HCN+"),values=c("white", "black")) +
   coord_cartesian(ylim = c(25,52)) + scale_y_continuous(breaks = seq(from = 25, to = 50, by = 5)) +
   ng1 + theme(legend.title = element_blank(),
-                                           legend.direction = "horizontal",
-                                           legend.position = "top",
-                                           panel.spacing = unit(2, "lines"))
+              legend.direction = "horizontal",
+              legend.position = "top",
+              panel.spacing = unit(2, "lines"))
 
-#Save figures S7 and S8
-ggsave("HPS_figures/Figure.S8_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S7_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+#Figure S9. Effects of vole damage on vegetative biomass
+plot.Biomass.x.Vole <- ggplot(means.Biomass.Vole,aes(x=Voles, y=Biomass.plant))+
+  geom_errorbar(aes(ymin=Biomass.plant-se,ymax=Biomass.plant+se),width=0.15,size=0.7)+
+  geom_point(size=4.5)+
+  xlab("Vole damage")+ylab("Biomass (mg)") +
+  coord_cartesian(ylim = c(20,50)) + scale_y_continuous(breaks = seq(from = 20, to = 50, by = 5)) +
+  ng1
+
+#Save figures S8 and S9
+ggsave("HPS_figures/Figure.S8_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S9_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## NUMBER OF INFLORESCENCES
 
@@ -724,7 +731,7 @@ means.Inflor.HCN.Voles <- within(means.Inflor.HCN.Voles, {
 means.Inflor.Voles <- summarySE(datExp, measurevar = "Total.Inf", groupvars = "Mammal.herb", na.rm = T)
 (52.21656 - 24.35514)/52.21656
 
-#Figure 3B. Effects of herbivores on number of inflorescences
+#Figure 2B. Effects of herbivores on number of inflorescences
 means.Inflor.Herb$Herbivory <- factor(means.Inflor.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Inflor.x.Herb <- ggplot(means.Inflor.Herb,aes(x=Herbivory, y=Total.Inf))+
   geom_errorbar(aes(ymin=Total.Inf-se,ymax=Total.Inf+se),width=0.15,size=0.7)+
@@ -733,7 +740,7 @@ plot.Inflor.x.Herb <- ggplot(means.Inflor.Herb,aes(x=Herbivory, y=Total.Inf))+
   coord_cartesian(ylim = c(30, 55)) + scale_y_continuous(breaks = seq(from=30, to=55, by=5)) +
   ng1
 
-#Figure 3E: Effects of HCN and voles on number of inflorescences
+#Figure 2E: Effects of HCN and voles on number of inflorescences
 means.Inflor.HCN.Voles$Voles <- factor(means.Inflor.HCN.Voles$Voles, levels=c("Undamaged", "Damaged"))
 plot.Inflor.x.Vole.HCN <- ggplot(means.Inflor.HCN.Voles,aes(x=Voles, y=Total.Inf, shape = HCN, fill = HCN))+
   geom_errorbar(aes(ymin=Total.Inf-se,ymax=Total.Inf+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
@@ -743,9 +750,9 @@ plot.Inflor.x.Vole.HCN <- ggplot(means.Inflor.HCN.Voles,aes(x=Voles, y=Total.Inf
   scale_fill_manual(labels = c("HCN-","HCN+"),values=c("white", "black")) +
   ng1 + theme(legend.title = element_blank())
 
-#Save figures 3B and 3E
-ggsave("HPS_figures/Figure.3B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.3E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures 2B and 2E
+ggsave("HPS_figures/Figure.2B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 ## NUMBER OF FLOWERS
@@ -776,15 +783,6 @@ summary(TF.model.T.Final)
 anova(TF.model.T.Final, type = 3, ddf = "kenward-roger")
 rand(TF.model.T.Final)
 
-test <- datExp %>% filter(HCN == "No")
-test$cyano <- paste(test$Glycosides.Ac, test$Linamarase.Li, sep = '-')
-
-modtest <- lmer(Total.Seed.mass.T ~ factor(cyano)*Herbivory + (1|Genotype) + (1|Block) +
-                (1|Genotype : Herbivory), data = test, REML = F)
-summary(modtest)
-anova(modtest, type = 3, ddf = "kenward-roger")
-
-
 #Dataset for plotting effects of invertebrate herbivores on absolute fitness
 means.TF.Herb <- summarySE(datExp, measurevar = "Total.Seed.mass", groupvars = "Herbivory", na.rm = T)
 (3.847784 - 2.604207)/3.847784 # ES
@@ -797,7 +795,7 @@ means.TF.Vole <- within(means.TF.Vole, {
 })
 (4.123573 - 1.908990)/4.123573 # ES
 
-#Figure 3C: Absolute fitness by herbivory treatment
+#Figure 2C: Absolute fitness by herbivory treatment
 means.TF.Herb$Herbivory <- factor(means.TF.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.TF.x.Herb <- ggplot(means.TF.Herb,aes(x=Herbivory, y=Total.Seed.mass))+
   geom_errorbar(aes(ymin=Total.Seed.mass-se,ymax=Total.Seed.mass+se),width=0.15,size=0.7)+
@@ -805,7 +803,7 @@ plot.TF.x.Herb <- ggplot(means.TF.Herb,aes(x=Herbivory, y=Total.Seed.mass))+
   xlab("Herbivory")+ylab("Total seed mass (g)") +
   ng1
 
-#Figure 3F: Absolute fitness by vole damage.
+#Figure 2F: Absolute fitness by vole damage.
 means.TF.Vole$Voles <- factor(means.TF.Vole$Voles, levels=c("Undamaged", "Damaged"))
 plot.TF.x.Vole <- ggplot(means.TF.Vole,aes(x=Voles, y=Total.Seed.mass))+
   geom_errorbar(aes(ymin=Total.Seed.mass-se,ymax=Total.Seed.mass+se),width=0.15,size=0.7)+
@@ -814,9 +812,9 @@ plot.TF.x.Vole <- ggplot(means.TF.Vole,aes(x=Voles, y=Total.Seed.mass))+
   coord_cartesian(ylim = c(1.7, 4.55)) + scale_y_continuous(breaks = seq(from = 2.0, to = 4.5, by = 0.5)) +
   ng1
 
-#Save figures 3C and 3F
-ggsave("HPS_figures/Figure.3C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.3F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures 2C and 2F
+ggsave("HPS_figures/Figure.2C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.2F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## SEEDS PER INFLORESCENCE ##
 
@@ -943,7 +941,7 @@ GTSelnData.all$InflResid <- resid(lmer(Infl.S ~ HCN + Pollination + Herbivory +
   HCN:Herbivory:Bnr.wdth.S + HCN:Herbivory:Bnr.ht.S +
   (1 | Genotype), data = GTSelnData.all))
 
-#Figure 4A. Plot number of inflorescences by HCN. 3 points not shown
+#Figure 3D. Plot number of inflorescences by HCN. 3 points not shown
 GTSelnData.all[order(GTSelnData.all$InflFitnessResid,decreasing=T)[1:5],]
 PlotInfl.x.HCN <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResid, group = HCN)) +
   labs(x = "Number of inflorescences (residual)", y = "Relative fitness (residual)") +
@@ -955,8 +953,8 @@ PlotInfl.x.HCN <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResid
   coord_cartesian(ylim = c(-2.3, 2.0)) + scale_y_continuous(breaks = seq(from = -2, to = 2.0, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-#Save figures 4A
-ggsave("HPS_figures/Figure.4A_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures 3D
+ggsave("HPS_figures/Figure.3D_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Data subset by herbivory treatment
 GTSelnData.all.Am <- subset(GTSelnData.all, Herbivory == "Ambient")
@@ -983,7 +981,7 @@ anova(Sel.Red, type = 3, ddf = "kenward-roger")
 # Effect size on # of inflorescences (Ambient vs. Reduced). 28% weaker for Ambient
 (1.343408 - 0.914871)/1.343408
 
-#Figure 4A. Plot number of inflorescences by Herbivory. 2 points not shown
+#Figure 3A. Plot number of inflorescences by Herbivory. 2 points not shown
 PlotInfl.x.Herb <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResid, group = Herbivory)) +
   labs(x = "Number of inflorescences (residual)", y = "Relative fitness (residual)") +
   geom_point(aes(shape = Herbivory, fill = Herbivory)) +
@@ -994,7 +992,7 @@ PlotInfl.x.Herb <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResi
   coord_cartesian(ylim = c(-2.3, 2.6)) + scale_y_continuous(breaks = seq(from = -2, to = 2.5, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.4B_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3A_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, HERBIVORY TREATMEN AND BANNER LENGTH/WIDTH
 
@@ -1036,7 +1034,7 @@ top.model.Acyan.Red <- lmer(RF.Seed ~ Pollination +
 summary(top.model.Acyan.Red)
 anova(top.model.Acyan.Red, type = 3, ddf = "kenward-roger")
 
-#Dataset for Figure 5A in paper.
+#Dataset for Figure 4A in paper.
 Coefs <- rbind(coef(summary(top.model.Cyan.Am))[c("Bnr.wdth.S", "Bnr.ht.S"),1:2],
               coef(summary(top.model.Acyan.Am))[c("Bnr.wdth.S", "Bnr.ht.S"),1:2],
               coef(summary(top.model.Cyan.Red))[c("Bnr.wdth.S", "Bnr.ht.S"),1:2],
@@ -1050,7 +1048,7 @@ Bnr.Size.Gradients$se <- as.numeric(as.character(Bnr.Size.Gradients$se))
 Bnr.Size.Gradients$Trait <- rownames(Bnr.Size.Gradients)
 Bnr.Size.Gradients$ci <- 1.96*Bnr.Size.Gradients$se
 
-#Figure 5A in paper. Selection on banner width by herbivory and HCN
+#Figure 4A in paper. Selection on banner width by herbivory and HCN
 Bnr.wdth.Gradients <- subset(Bnr.Size.Gradients, Trait == "Bnr.wdth.S")
 plotBnr.wdth.Gradients <- ggplot(Bnr.wdth.Gradients, aes(x = HCN, y = Estimate, shape = Herbivory, fill = Herbivory)) +
   labs(x = "HCN", y = "Selection gradient") +
@@ -1064,7 +1062,7 @@ plotBnr.wdth.Gradients <- ggplot(Bnr.wdth.Gradients, aes(x = HCN, y = Estimate, 
               axis.line.x = element_blank(),
               axis.title.x = element_blank())
 
-#Figure 5B in paper. Selection on banner length by herbivory and HCN
+#Figure 4B in paper. Selection on banner length by herbivory and HCN
 Bnr.lgth.Gradients <- subset(Bnr.Size.Gradients, Trait == "Bnr.ht.S")
 scaleFUN <- function(x) sprintf("%.1f", x)
 plotBnr.lgth.Gradients <- ggplot(Bnr.lgth.Gradients, aes(x = HCN, y = Estimate, shape = Herbivory, fill = Herbivory)) +
@@ -1079,9 +1077,9 @@ plotBnr.lgth.Gradients <- ggplot(Bnr.lgth.Gradients, aes(x = HCN, y = Estimate, 
               axis.line.x = element_blank(),
               axis.title.x = element_blank())
 
-#Save figures 5A and 5B
-ggsave("HPS_figures/Figure.5A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.5B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+#Save figures 4A and 4B
+ggsave("HPS_figures/Figure.4A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.4B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, POLLINATION TREATMENT AND DATE TO FIRST FLOWER
 
@@ -1128,7 +1126,7 @@ top.model.Acyan.Supp <- lmer(RF.Seed ~ Herbivory +
 summary(top.model.Acyan.Supp)
 anova(top.model.Acyan.Supp, type = 3, ddf = "kenward-roger")
 
-#Dataset for Figure 5A in paper.
+#Dataset for Figure S10 in paper.
 Coefs <- rbind(coef(summary(top.model.Cyan.Open))["Flwr.date.S",1:2],
               coef(summary(top.model.Acyan.Open))["Flwr.date.S",1:2],
               coef(summary(top.model.Cyan.Supp))["Flwr.date.S",1:2],
@@ -1142,7 +1140,7 @@ Flwr.date.Gradients$se <- as.numeric(as.character(Flwr.date.Gradients$se))
 Flwr.date.Gradients$Trait <- "Date to first flower"
 Flwr.date.Gradients$ci <- 1.96*Flwr.date.Gradients$se
 
-#Figure S9 in paper. Selection on banner width by herbivory and HCN
+#Figure S10 in paper. Selection on banner width by herbivory and HCN
 Flwr.date.Gradients$Pollination <- factor(Flwr.date.Gradients$Pollination, levels=c("Open", "Supplemental"))
 Flwr.date.Gradients$HCN <- factor(Flwr.date.Gradients$HCN, levels=c("No", "Yes"))
 plotFlwr.date.Gradients <- ggplot(Flwr.date.Gradients, aes(x = HCN, y = Estimate, group = Pollination, shape = Pollination, fill = Pollination)) +
@@ -1157,7 +1155,7 @@ plotFlwr.date.Gradients <- ggplot(Flwr.date.Gradients, aes(x = HCN, y = Estimate
               axis.line.x = element_blank(),
               axis.title.x = element_blank())
 
-ggsave("HPS_figures/Figure.S9_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.S10_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 #############################################
@@ -1279,7 +1277,7 @@ GTSelnData.all.Voles$InflResid <- resid(lmer(Infl.S ~ Mammal.herb + HCN + Bnr.wd
   Mammal.herb:Flwrs.S + Mammal.herb:HCN:Bnr.wdth.S +
   (1 | Genotype), data = GTSelnData.all.Voles))
 
-#Figure 4C. Plot number of inflorescences by vole damage.
+#Figure 3B. Plot number of inflorescences by vole damage.
 GTSelnData.all.Voles[order(GTSelnData.all.Voles$InflFitnessResid,decreasing=T)[1:5],]
 PlotInfl.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = InflResid, y = InflFitnessResid, group = factor(Mammal.herb))) +
   labs(x = "Number of inflorescences (residual)", y = "Relative fitness (residual)") +
@@ -1291,7 +1289,7 @@ PlotInfl.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = InflResid, y = InflFitn
   coord_cartesian(ylim = c(-1.5, 2.0)) + scale_y_continuous(breaks = seq(from = -2, to = 3.0, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.4C_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3B_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Number of flowers Fitness residuals. Add to dataframe
 GTSelnData.all.Voles$FlwrsFitnessResid <- resid(lmer(RF.Seed ~ Mammal.herb + HCN + Bnr.wdth.S +
@@ -1307,7 +1305,7 @@ GTSelnData.all.Voles$FlwrsResid <- resid(lmer(Flwrs.S ~ Mammal.herb + HCN + Bnr.
   Mammal.herb:HCN:Bnr.wdth.S +
   (1 | Genotype), data = GTSelnData.all.Voles))
 
-#Figure 4D. Plot number of flowers per inflorescence by vole damage. 3 point not shown
+#Figure 3C. Plot number of flowers per inflorescence by vole damage. 3 point not shown
 GTSelnData.all.Voles[order(GTSelnData.all.Voles$FlwrsFitnessResid,decreasing=T)[1:5],]
 PlotFlwrs.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = FlwrsResid, y = FlwrsFitnessResid, group = factor(Mammal.herb))) +
   labs(x = "Number of flowers (residual)", y = "Relative fitness (residual)") +
@@ -1319,7 +1317,7 @@ PlotFlwrs.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = FlwrsResid, y = FlwrsF
   coord_cartesian(ylim = c(-0.55, 0.5)) + scale_y_continuous(breaks = seq(from = -0.55, to = 0.5, by = 0.2)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.4D_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.3C_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 
@@ -1507,6 +1505,7 @@ AgentMedSel <- within(AgentMedSel, {
                  ifelse(Agent == "PollMedSel", "Pollinator", "Defense"))
 })
 
+# Figure 5 in paper. Selection imposed by each of 3 agents: defense, herbivores, pollinators
 scaleFUN <- function(x) sprintf("%.2f", x)
 plotAgent.Med.Sel <- ggplot(AgentMedSel, aes(x = Agent, y = Gradient, group = Trait))+
   geom_point(size = 3, aes(shape = Trait), position = position_dodge(width = 0.3), alpha = 0.4)+
@@ -1521,5 +1520,5 @@ plotAgent.Med.Sel <- ggplot(AgentMedSel, aes(x = Agent, y = Gradient, group = Tr
   ng1 + theme(legend.title=element_blank())
 plotAgent.Med.Sel
 
-ggsave("HPS_figures/Figure.6_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.5_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
 
