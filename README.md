@@ -1,4 +1,4 @@
-**The manuscript associated with this project is currently in review at _Evolution_**
+**The manuscript associated with this project has been submitted to _The Journal of Evolutionary Biology_**
 
 # Herbivore and Pollinator-mediated Selection (HPS)
 ### Author: James S. Santangelo
