@@ -535,9 +535,10 @@ means.Flwr.date.Herb <- summarySE(datExp, measurevar = "Flower.date", groupvars 
 means.Flwr.date.Vole$Voles <- factor(means.Flwr.date.Vole$Voles, levels=c("Undamaged", "Damaged"))
 plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date)) +
   geom_errorbar(aes(ymin=Flower.date-se,ymax=Flower.date+se),width=0.15,size=0.7) +
-  geom_point(size=4.5) +
+  geom_point(size=5.5) +
   xlab("Vole damage") + ylab("Days to first flower") +
-  coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 2)) + ng1
+  coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 4)) + 
+  ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 # Save Figure 2D
 ggsave("HPS_figures/Figure.2D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
@@ -614,9 +615,9 @@ means.Bnr.ht.HCN.Poll <- summarySE(datExp, measurevar = "Avg.Bnr.Ht", groupvars 
 means.Bnr.ht.Herb$Herbivory <- factor(means.Bnr.ht.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Bnr.ht.x.Herb <- ggplot(means.Bnr.ht.Herb,aes(x=Herbivory, y=Avg.Bnr.Ht))+
   geom_errorbar(aes(ymin=Avg.Bnr.Ht-se,ymax=Avg.Bnr.Ht+se),width=0.15,size=0.7)+
-  geom_point(size=4.5)+
+  geom_point(size=5.5)+
   xlab("Herbivory")+ylab("Banner length (mm)") +
-  ng1
+  ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Figure S7B: Effects of HCN and Pollinators on banner length
 plot.Bnr.ht.x.HCN.Poll <- ggplot(means.Bnr.ht.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Ht, shape = Pollination, fill = Pollination))+
@@ -735,20 +736,20 @@ means.Inflor.Voles <- summarySE(datExp, measurevar = "Total.Inf", groupvars = "M
 means.Inflor.Herb$Herbivory <- factor(means.Inflor.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.Inflor.x.Herb <- ggplot(means.Inflor.Herb,aes(x=Herbivory, y=Total.Inf))+
   geom_errorbar(aes(ymin=Total.Inf-se,ymax=Total.Inf+se),width=0.15,size=0.7)+
-  geom_point(size=4.5)+
+  geom_point(size=5.5)+
   xlab("Herbivory")+ylab("Number of Inflorescences") +
   coord_cartesian(ylim = c(30, 55)) + scale_y_continuous(breaks = seq(from=30, to=55, by=5)) +
-  ng1
+  ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Figure 2E: Effects of HCN and voles on number of inflorescences
 means.Inflor.HCN.Voles$Voles <- factor(means.Inflor.HCN.Voles$Voles, levels=c("Undamaged", "Damaged"))
 plot.Inflor.x.Vole.HCN <- ggplot(means.Inflor.HCN.Voles,aes(x=Voles, y=Total.Inf, shape = HCN, fill = HCN))+
   geom_errorbar(aes(ymin=Total.Inf-se,ymax=Total.Inf+se),width=0.15,size=0.7,position = position_dodge(width = 0.5))+
-  geom_point(size=4.5, position = position_dodge(width = 0.5))+
+  geom_point(size=5.5, position = position_dodge(width = 0.5))+
   xlab("Voles")+ylab("Number of inflorescences")+
   scale_shape_manual(labels = c("HCN-","HCN+"),values=c(24, 21), guide = guide_legend(title.position = "top"))+
   scale_fill_manual(labels = c("HCN-","HCN+"),values=c("white", "black")) +
-  ng1 + theme(legend.title = element_blank())
+  ng1 + theme(legend.title = element_blank()) + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Save figures 2B and 2E
 ggsave("HPS_figures/Figure.2B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
@@ -799,18 +800,18 @@ means.TF.Vole <- within(means.TF.Vole, {
 means.TF.Herb$Herbivory <- factor(means.TF.Herb$Herbivory, levels=c("Reduced", "Ambient"))
 plot.TF.x.Herb <- ggplot(means.TF.Herb,aes(x=Herbivory, y=Total.Seed.mass))+
   geom_errorbar(aes(ymin=Total.Seed.mass-se,ymax=Total.Seed.mass+se),width=0.15,size=0.7)+
-  geom_point(size=4.5)+
+  geom_point(size=5.5)+
   xlab("Herbivory")+ylab("Total seed mass (g)") +
-  ng1
+  ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Figure 2F: Absolute fitness by vole damage.
 means.TF.Vole$Voles <- factor(means.TF.Vole$Voles, levels=c("Undamaged", "Damaged"))
 plot.TF.x.Vole <- ggplot(means.TF.Vole,aes(x=Voles, y=Total.Seed.mass))+
   geom_errorbar(aes(ymin=Total.Seed.mass-se,ymax=Total.Seed.mass+se),width=0.15,size=0.7)+
-  geom_point(size=4.5)+
+  geom_point(size=5.5)+
   xlab("Vole damage")+ylab("Total seed mass (g)") +
   coord_cartesian(ylim = c(1.7, 4.55)) + scale_y_continuous(breaks = seq(from = 2.0, to = 4.5, by = 0.5)) +
-  ng1
+  ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Save figures 2C and 2F
 ggsave("HPS_figures/Figure.2C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
@@ -1515,7 +1516,7 @@ plotAgent.Med.Sel <- ggplot(AgentMedSel, aes(x = Agent, y = Gradient, group = Tr
                fun.ymin = function(x) mean(x) - (1.96*(sd(x)/sqrt(length(x)))),
                fun.ymax = function(x) mean(x) + (1.96*(sd(x)/sqrt(length(x)))),
                geom = "errorbar", width = 0.15, color = "black", aes(group = Agent)) +
-  stat_summary(fun.y = mean, geom = "point", size = 2, color = "black", aes(group = Agent)) +
+  stat_summary(fun.y = mean, geom = "point", size = 5, color = "black", aes(group = Agent)) +
   coord_cartesian(ylim = c(-0.4, 0.4)) + scale_y_continuous(breaks = seq(from = -0.4, to = 0.4, by = 0.1), labels = scaleFUN) +
   ng1 + theme(legend.title=element_blank())
 plotAgent.Med.Sel
