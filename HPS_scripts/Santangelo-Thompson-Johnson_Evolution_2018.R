@@ -38,12 +38,12 @@ installed.packages(.libPaths()[1])[, "Package"] # Show installed packages
 library(Rmisc)
 library(lme4)
 library(lmerTest)
-library(dplyr)
 library(lsmeans)
 library(ggplot2)
 library(broom)
 library(car)
 library(multcompView)
+library(dplyr)
 
 #FUNCTIONS
 
@@ -1284,7 +1284,7 @@ PlotInfl.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = InflResid, y = InflFitn
   labs(x = "Number of inflorescences (residual)", y = "Relative fitness (residual)") +
   geom_point(aes(shape = factor(Mammal.herb), fill = factor(Mammal.herb))) +
   scale_shape_manual(labels = c("No vole damage","Vole damage"), values=c(21, 25)) +
-  scale_fill_manual(labels = c("No vole damage","Vole damage"), values=c("white", "black")) +
+  scale_fill_manual(labels = c("No vole damage","Vole damage"), values=c("black", "white")) +
   geom_smooth(method = "lm", se = F, colour = "black", size = 1.05, fullrange = T, aes(linetype = factor(Mammal.herb)))  +
   scale_linetype_manual(labels = c("No vole damage","Vole damage"), values=c(1, 2)) +
   coord_cartesian(ylim = c(-1.5, 2.0)) + scale_y_continuous(breaks = seq(from = -2, to = 3.0, by = 0.5)) +
@@ -1312,7 +1312,7 @@ PlotFlwrs.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = FlwrsResid, y = FlwrsF
   labs(x = "Number of flowers (residual)", y = "Relative fitness (residual)") +
   geom_point(aes(shape = factor(Mammal.herb), fill = factor(Mammal.herb))) +
   scale_shape_manual(labels = c("No vole damage","Vole damage"), values=c(21, 25)) +
-  scale_fill_manual(labels = c("No vole damage","Vole damage"), values=c("white", "black")) +
+  scale_fill_manual(labels = c("No vole damage","Vole damage"), values=c("black", "white")) +
   geom_smooth(method = "lm", se = F, colour = "black", size = 1.05, fullrange = T, aes(linetype = factor(Mammal.herb)))  +
   scale_linetype_manual(labels = c("No vole damage","Vole damage"), values=c(1, 2)) +
   coord_cartesian(ylim = c(-0.55, 0.5)) + scale_y_continuous(breaks = seq(from = -0.55, to = 0.5, by = 0.2)) +
@@ -1517,9 +1517,29 @@ plotAgent.Med.Sel <- ggplot(AgentMedSel, aes(x = Agent, y = Gradient, group = Tr
                fun.ymax = function(x) mean(x) + (1.96*(sd(x)/sqrt(length(x)))),
                geom = "errorbar", width = 0.15, color = "black", aes(group = Agent)) +
   stat_summary(fun.y = mean, geom = "point", size = 5, color = "black", aes(group = Agent)) +
-  coord_cartesian(ylim = c(-0.4, 0.4)) + scale_y_continuous(breaks = seq(from = -0.4, to = 0.4, by = 0.1), labels = scaleFUN) +
+  coord_cartesian(ylim = c(-0.4, 0.55)) + scale_y_continuous(breaks = seq(from = -0.4, to = 0.55, by = 0.1), labels = scaleFUN) +
   ng1 + theme(legend.title=element_blank())
 plotAgent.Med.Sel
 
+
+plotAgent.Med.Sel_ABS <- ggplot(AgentMedSel, aes(x = Agent, y = abs(Gradient), group = Trait))+
+  geom_point(size = 3, aes(shape = Trait), position = position_dodge(width = 0.3), alpha = 0.4)+
+  xlab("Agent")+ylab("Strength of agent-mediated selection") +
+  # geom_hline(aes(yintercept = 0), color = "black", linetype = "dashed") +
+  stat_summary(fun.y = mean,
+               fun.ymin = function(x) mean(x) - (1.96*(sd(x)/sqrt(length(x)))),
+               fun.ymax = function(x) mean(x) + (1.96*(sd(x)/sqrt(length(x)))),
+               geom = "errorbar", width = 0.15, color = "black", aes(group = Agent)) +
+  stat_summary(fun.y = mean, geom = "point", size = 5, color = "black", aes(group = Agent)) +
+  coord_cartesian(ylim = c(0, 0.4)) + scale_y_continuous(breaks = seq(from = 0, to = 0.4, by = 0.1), labels = scaleFUN) +
+  ng1 + theme(legend.title=element_blank())
+plotAgent.Med.Sel_ABS
+
+# Means of absolute value selection gradients
+means_AbsVal_Sel <- AgentMedSel %>%
+  group_by(Agent) %>%
+  summarize(mean = mean(abs(Gradient)))
+
 ggsave("HPS_figures/Figure.5_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
+ggsave("HPS_figures/Figure.5.Inset_ABS_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel_ABS, width = 8, height = 8, unit = "in", dpi = 600)
 
