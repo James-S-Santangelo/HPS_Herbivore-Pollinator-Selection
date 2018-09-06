@@ -130,18 +130,18 @@ datIns <- read.table(Insecticide.data, header=T, fill = T, row.names = NULL)
 #Mixed model testing the effects of insecticide and molluscicide on plant biomass
 Model.Ins.Biomass <- lmer(Biomass~Molluscicide*Insecticide + (1|Parent.plant), data = datIns)
 summary(Model.Ins.Biomass)
-anova(Model.Ins.Biomass, ddf = "kenward-roger", type=3)
+anova(Model.Ins.Biomass, ddf = "Kenward-Roger", type=3)
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-lsmeans::lsmeans(Model.Ins.Biomass, pairwise~Molluscicide * Insecticide, mode = "kenward-roger")
+lsmeans::lsmeans(Model.Ins.Biomass, pairwise~Molluscicide * Insecticide, mode = "Kenward-Roger")
 
 #Mixed model testing the effects of insecticide and molluscicide on plant fitness
 Model.Ins.Fitness <- lmer(Num.Seeds~Molluscicide*Insecticide + (1|Parent.plant), data = datIns, na.action = "na.omit")
 summary(Model.Ins.Fitness)
-anova(Model.Ins.Fitness, ddf = "kenward-roger", type=3)
+anova(Model.Ins.Fitness, ddf = "Kenward-Roger", type=3)
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-lsmeans::lsmeans(Model.Ins.Fitness, pairwise~Molluscicide * Insecticide, mode = "kenward-roger")
+lsmeans::lsmeans(Model.Ins.Fitness, pairwise~Molluscicide * Insecticide, mode = "Kenward-Roger")
 
 #Figure S2A: Biomass by molluscicide and insecticide
 meansBIOxMolxIns <- summarySE(datIns, measurevar = "Biomass", groupvars = c("Molluscicide","Insecticide"), na.rm = T)
@@ -183,7 +183,7 @@ datPoll.obs <- read.table(Pollinator.observations, header = T, fill = T, row.nam
 #LMM testing for effects of insecticide application on time spent foraging on plants. Control for plant display
 model.Poll.obs <- lmer(Time.s ~ Num.Inf + Insecticide + (1|Pollinator/Plant) + (1|Date), data = datPoll.obs)
 summary(model.Poll.obs)
-anova(model.Poll.obs, type = 3, ddf = "kenward-roger")
+anova(model.Poll.obs, type = 3, ddf = "Kenward-Roger")
 
 #Effects of insecticides on visitation
 chisq.test(table(datPoll.obs$Insecticide))
@@ -213,7 +213,7 @@ datBag.Melt <- within(datBag.Melt, {
 #Model seeing if the mass of seeds from bagged inflorescences differs from mass of
 #seeds from unbagged inflorescences from open pollinated plants
 Mod.Bag <- lmer(Seed.mass ~ Trt + (1|Plant/Bagged), data = datBag.Melt)
-anova(Mod.Bag, type = 3, ddf = "kenward-roger")
+anova(Mod.Bag, type = 3, ddf = "Kenward-Roger")
 summary(Mod.Bag)
 
 #Post-hoc comparisons of above model
@@ -248,29 +248,23 @@ datExp %>% group_by(Herbivory) %>% summarize(n = sum(!is.na(Leaf.avg.dmg.1)))
 
 #Survey 1
 modelHerb.1 <- lmer(Leaf.avg.dmg.1~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
-anova(modelHerb.1, type = 3, ddf = 'kenward-roger')
+anova(modelHerb.1, type = 3, ddf = 'Kenward-Roger')
 summary(modelHerb.1)
-Tukey_modelHerb.1 <- lsmeans::lsmeans(modelHerb.1, pairwise~HCN*Herbivory, mode = "kenward-roger")
-lsmeans::cld(Tukey_modelHerb.1)
 
 #Survey 2
 modelHerb.2 <- lmer(Leaf.avg.dmg.2~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
-anova(modelHerb.2, type = 3, ddf = 'kenward-roger')
+anova(modelHerb.2, type = 3, ddf = 'Kenward-Roger')
 summary(modelHerb.2)
-Tukey_modelHerb.2 <- lsmeans::lsmeans(modelHerb.2, pairwise~HCN*Herbivory, mode = "kenward-roger")
-lsmeans::cld(Tukey_modelHerb.2)
 
 #Survey 3
 modelHerb.3 <- lmer(Leaf.avg.dmg.3~HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
-anova(modelHerb.3, type = 3, ddf = 'kenward-roger')
+anova(modelHerb.3, type = 3, ddf = 'Kenward-Roger')
 summary(modelHerb.3)
-Tukey_modelHerb.3 <- lsmeans::lsmeans(modelHerb.3, pairwise~HCN*Herbivory, mode = "kenward-roger")
-lsmeans::cld(Tukey_modelHerb.3)
 
 #3 surveys combined
 datExp$Leaf.avg.dmg.All <- (datExp$Leaf.avg.dmg.1 + datExp$Leaf.avg.dmg.2 + datExp$Leaf.avg.dmg.3)/3
 modelHerb.4 <- lmer(Leaf.avg.dmg.All~HCN*Herbivory + (1|Genotype) + (1|Genotype:Herbivory),data = datExp)
-anova(modelHerb.4, type = 3, ddf = 'kenward-roger')
+anova(modelHerb.4, type = 3, ddf = 'Kenward-Roger')
 summary(modelHerb.4)
 
 #Create melted dataset for plotting all 3 surveys on single figure
@@ -330,7 +324,7 @@ datExp %>% group_by(Herbivory) %>% summarize(n = sum(!is.na(Avg.bnr.dmg)))
 
 #Model testing for differences in floral damage due to HCN and pesticide treatment
 model.bnr.dmg <- lmer(Avg.bnr.dmg ~ HCN*Herbivory + (1|Genotype) + (1|Block) + (1|Genotype:Herbivory),data = datExp)
-anova(model.bnr.dmg, type = 3, ddf = "kenward-roger")
+anova(model.bnr.dmg, type = 3, ddf = "Kenward-Roger")
 
 #Mean floral damage for pesticide treated and untreated plants
 means.bnr.dmg <- summarySE(datExp, measurevar = "Avg.bnr.dmg", groupvars = "Herbivory", na.rm = TRUE)
@@ -516,7 +510,7 @@ trait.model.1.T.Final <- lmer(Flower.date.T ~ Mammal.herb + Herbivory + (1 | Gen
   data = datExp_Flower.date, REML = F)
 
 #Model output
-anova(trait.model.1.T.Final, type = 3, ddf = "kenward-roger")
+anova(trait.model.1.T.Final, type = 3, ddf = "Kenward-Roger")
 rand(trait.model.1.T.Final) # Significant genotypic variation
 
 #Dataset for plotting effect of voles on flowering date
@@ -550,11 +544,11 @@ trait.model.2.UnT.Final <- lmer(Avg.Bnr.Wdth ~ HCN + Herbivory + Pollination + (
   data = datExp_Avg.Bnr.Wdth, REML = F)
 
 #Model output
-anova(trait.model.2.UnT.Final, type = 3, ddf = "kenward-roger")
+anova(trait.model.2.UnT.Final, type = 3, ddf = "Kenward-Roger")
 rand(trait.model.2.UnT.Final) # Signficant genotypic, block and GT:Herb variation
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-Tukey_BW.HCN.Poll <- lsmeans::lsmeans(trait.model.2.UnT.Final, pairwise~HCN*Pollination, mode = "kenward-roger")
+Tukey_BW.HCN.Poll <- lsmeans::lsmeans(trait.model.2.UnT.Final, pairwise~HCN*Pollination, mode = "Kenward-Roger")
 Tukey_BW.HCN.Poll
 
 #Dataset for plotting effect of invertebrate herbivores Banner width
@@ -597,11 +591,11 @@ trait.model.3.UnT.Final <- lmer(Avg.Bnr.Ht ~ HCN + Herbivory + Pollination +
   HCN:Pollination, data = datExp_Avg.Bnr.Ht, REML = F)
 
 #Model output
-anova(trait.model.3.UnT.Final, type = 3, ddf = "kenward-roger")
+anova(trait.model.3.UnT.Final, type = 3, ddf = "Kenward-Roger")
 rand(trait.model.3.UnT.Final) # Signficant genotypic, block and GT:Herb variation
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-Tukey_BL.HCN.Poll <- lsmeans::lsmeans(trait.model.3.UnT.Final, pairwise~HCN*Pollination, mode = "kenward-roger")
+Tukey_BL.HCN.Poll <- lsmeans::lsmeans(trait.model.3.UnT.Final, pairwise~HCN*Pollination, mode = "Kenward-Roger")
 Tukey_BL.HCN.Poll
 
 #Dataset for plotting effect of invertebrate herbivores Banner length
@@ -645,11 +639,11 @@ trait.model.4.T.Final <- lmer(Biomass.plant.T ~ Mammal.herb + HCN + Herbivory +
   HCN:Herbivory:Pollination, data = datExp_Biomass.plant, REML = F)
 
 #Model output
-anova(trait.model.4.T.Final,type = 3, ddf = "kenward-roger")
+anova(trait.model.4.T.Final,type = 3, ddf = "Kenward-Roger")
 rand(trait.model.4.T.Final) # Signficant genotypic and block
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-Tukey_Bio.HCN.Poll.Herb <- lsmeans::lsmeans(trait.model.4.T.Final, pairwise~HCN*Herbivory*Pollination, mode = "kenward-roger")
+Tukey_Bio.HCN.Poll.Herb <- lsmeans::lsmeans(trait.model.4.T.Final, pairwise~HCN*Herbivory*Pollination, mode = "Kenward-Roger")
 Tukey_Bio.HCN.Poll.Herb
 
 #Variation explained by significant terms from above model
@@ -710,11 +704,11 @@ trait.model.5.T.Final <- lmer(Total.Inf.T ~ Mammal.herb + HCN + Herbivory +
   Mammal.herb:HCN, data = datExp_Total.Inf, REML = F)
 
 #Model output
-anova(trait.model.5.T.Final, type = 3, ddf = "kenward-roger")
+anova(trait.model.5.T.Final, type = 3, ddf = "Kenward-Roger")
 rand(trait.model.5.T.Final) # Significant Genotype, block and GT:Herb variation
 
 #Post-hoc comparisons of mixed model using Kenward-Roger degrees of freedom
-Tukey_InfVoles <- lsmeans::lsmeans(trait.model.5.T.Final, pairwise~Mammal.herb*HCN, mode = "kenward-roger")
+Tukey_InfVoles <- lsmeans::lsmeans(trait.model.5.T.Final, pairwise~Mammal.herb*HCN, mode = "Kenward-Roger")
 Tukey_InfVoles
 
 #Dataset for plotting the effects of herbivores on number of inflorescences
@@ -763,7 +757,7 @@ trait.model.6.UnT.Final <- lmer(Num.flwrs ~ Mammal.herb + (1 | Genotype) +
   (1 | Block), data = datExp_Num.flwrs, REML = F)
 
 #Model output
-anova(trait.model.6.UnT.Final, type = 3, ddf = "kenward-roger")
+anova(trait.model.6.UnT.Final, type = 3, ddf = "Kenward-Roger")
 rand(trait.model.6.UnT.Final) # Significant Genotype, block and GT:Herb variation
 
 
@@ -781,7 +775,7 @@ TF.model.T.Final <- lmer(Total.Seed.mass.T ~ Mammal.herb + HCN +
   Herbivory:Pollination + HCN:Herbivory:Pollination, data = datExp,
   REML = F)
 summary(TF.model.T.Final)
-anova(TF.model.T.Final, type = 3, ddf = "kenward-roger")
+anova(TF.model.T.Final, type = 3, ddf = "Kenward-Roger")
 rand(TF.model.T.Final)
 
 #Dataset for plotting effects of invertebrate herbivores on absolute fitness
@@ -827,7 +821,7 @@ PL.model.T.Final <- lmer(Seeds.Inf.T ~ Mammal.herb + HCN + Herbivory +
 
 #Model output
 summary(PL.model.T.Final)
-anova(PL.model.T.Final, type = 3, ddf = "kenward-roger")
+anova(PL.model.T.Final, type = 3, ddf = "Kenward-Roger")
 rand(PL.model.T.Final)
 
 
@@ -871,7 +865,7 @@ Global.model_GTSeln <- lmer(RF.Seed ~ HCN + Pollination + Herbivory +
   data = GTSelnData.all, REML = FALSE)
 
 #Step 2 -- Backward model selection
-lmerTest::step(Global.model_GTSeln, ddf = "kenward-roger", type = 3, alpha.random = 0.1, alpha.fixed = 0.05,
+lmerTest::step(Global.model_GTSeln, ddf = "Kenward-Roger", type = 3, alpha.random = 0.1, alpha.fixed = 0.05,
               reduce.fixed = TRUE, reduce.random = FALSE, fixed.calc = TRUE, lsmeans.calc = TRUE,
               difflsmeans.calc = TRUE, test.effs = NULL,  keep.effs = "Genotype")
 
@@ -910,7 +904,7 @@ Sel.Cyan <- lmer(RF.Seed ~ Pollination + Herbivory +
   Herbivory:Infl.S + (1 | Genotype),
   data = GTSelnData.all.Cyan)
 summary(Sel.Cyan)
-anova(Sel.Cyan, type = 3, ddf = "kenward-roger")
+anova(Sel.Cyan, type = 3, ddf = "Kenward-Roger")
 
 #HCN– plants
 Sel.Acyan <- lmer(RF.Seed ~ Pollination + Herbivory +
@@ -918,7 +912,7 @@ Sel.Acyan <- lmer(RF.Seed ~ Pollination + Herbivory +
   Pollination:Flwr.date.S + Herbivory:Bnr.wdth.S + Herbivory:Bnr.ht.S +
   Herbivory:Infl.S + (1 | Genotype), data = GTSelnData.all.Acyan)
 summary(Sel.Acyan)
-anova(Sel.Acyan, type = 3, ddf = "kenward-roger")
+anova(Sel.Acyan, type = 3, ddf = "Kenward-Roger")
 
 
 # Effect size on # inflorescences (Acyan vs. Cyan). 44% weaker among Acyan
@@ -968,7 +962,7 @@ Sel.Am <- lmer(RF.Seed ~ HCN + Pollination +
   HCN:Bnr.wdth.S + HCN:Bnr.ht.S + HCN:Infl.S + HCN:Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Am)
 summary(Sel.Am)
-anova(Sel.Am, type = 3, ddf = "kenward-roger")
+anova(Sel.Am, type = 3, ddf = "Kenward-Roger")
 
 #Reduced herbivory
 Sel.Red <- lmer(RF.Seed ~ HCN + Pollination +
@@ -977,7 +971,7 @@ Sel.Red <- lmer(RF.Seed ~ HCN + Pollination +
   HCN:Bnr.wdth.S + HCN:Bnr.ht.S + HCN:Infl.S + HCN:Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Red)
 summary(Sel.Red)
-anova(Sel.Red, type = 3, ddf = "kenward-roger")
+anova(Sel.Red, type = 3, ddf = "Kenward-Roger")
 
 # Effect size on # of inflorescences (Ambient vs. Reduced). 28% weaker for Ambient
 (1.343408 - 0.914871)/1.343408
@@ -1009,7 +1003,7 @@ top.model.Cyan.Am <- lmer(RF.Seed ~ Pollination +
   Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Cyan.Am)
 summary(top.model.Cyan.Am)
-anova(top.model.Cyan.Am, type = 3, ddf = "kenward-roger")
+anova(top.model.Cyan.Am, type = 3, ddf = "Kenward-Roger")
 
 #HCN–, Ambient herbivory
 top.model.Acyan.Am <- lmer(RF.Seed ~ Pollination +
@@ -1017,7 +1011,7 @@ top.model.Acyan.Am <- lmer(RF.Seed ~ Pollination +
   Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Acyan.Am)
 summary(top.model.Acyan.Am)
-anova(top.model.Acyan.Am, type = 3, ddf = "kenward-roger")
+anova(top.model.Acyan.Am, type = 3, ddf = "Kenward-Roger")
 
 #HCN+, Reduced herbivory
 top.model.Cyan.Red <- lmer(RF.Seed ~ Pollination +
@@ -1025,7 +1019,7 @@ top.model.Cyan.Red <- lmer(RF.Seed ~ Pollination +
   Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Cyan.Red)
 summary(top.model.Cyan.Red)
-anova(top.model.Cyan.Red, type = 3, ddf = "kenward-roger")
+anova(top.model.Cyan.Red, type = 3, ddf = "Kenward-Roger")
 
 #HCN–, Reduced herbivory
 top.model.Acyan.Red <- lmer(RF.Seed ~ Pollination +
@@ -1033,7 +1027,7 @@ top.model.Acyan.Red <- lmer(RF.Seed ~ Pollination +
   Pollination:Flwr.date.S +
   (1 | Genotype), data = GTSelnData.all.Acyan.Red)
 summary(top.model.Acyan.Red)
-anova(top.model.Acyan.Red, type = 3, ddf = "kenward-roger")
+anova(top.model.Acyan.Red, type = 3, ddf = "Kenward-Roger")
 
 #Dataset for Figure 4A in paper.
 Coefs <- rbind(coef(summary(top.model.Cyan.Am))[c("Bnr.wdth.S", "Bnr.ht.S"),1:2],
@@ -1097,7 +1091,7 @@ top.model.Cyan.Open <- lmer(RF.Seed ~ Herbivory +
   Herbivory:Infl.S + (1 | Genotype),
   data = GTSelnData.all.Cyan.Open)
 summary(top.model.Cyan.Open)
-anova(top.model.Cyan.Open, type = 3, ddf = "kenward-roger")
+anova(top.model.Cyan.Open, type = 3, ddf = "Kenward-Roger")
 
 #HCN–, Open pollination
 top.model.Acyan.Open <- lmer(RF.Seed ~ Herbivory +
@@ -1106,7 +1100,7 @@ top.model.Acyan.Open <- lmer(RF.Seed ~ Herbivory +
   Herbivory:Infl.S + (1 | Genotype),
   data = GTSelnData.all.Acyan.Open)
 summary(top.model.Acyan.Open)
-anova(top.model.Acyan.Open, type = 3, ddf = "kenward-roger")
+anova(top.model.Acyan.Open, type = 3, ddf = "Kenward-Roger")
 
 
 #HCN+, Supplemental pollination
@@ -1116,7 +1110,7 @@ top.model.Cyan.Supp <- lmer(RF.Seed ~ Herbivory +
   Herbivory:Infl.S + (1 | Genotype),
   data = GTSelnData.all.Cyan.Supp)
 summary(top.model.Cyan.Supp)
-anova(top.model.Cyan.Supp, type = 3, ddf = "kenward-roger")
+anova(top.model.Cyan.Supp, type = 3, ddf = "Kenward-Roger")
 
 #HCN–, Supplemental pollination
 top.model.Acyan.Supp <- lmer(RF.Seed ~ Herbivory +
@@ -1125,7 +1119,7 @@ top.model.Acyan.Supp <- lmer(RF.Seed ~ Herbivory +
   Herbivory:Infl.S + (1 | Genotype),
   data = GTSelnData.all.Acyan.Supp)
 summary(top.model.Acyan.Supp)
-anova(top.model.Acyan.Supp, type = 3, ddf = "kenward-roger")
+anova(top.model.Acyan.Supp, type = 3, ddf = "Kenward-Roger")
 
 #Dataset for Figure S10 in paper.
 Coefs <- rbind(coef(summary(top.model.Cyan.Open))["Flwr.date.S",1:2],
@@ -1185,7 +1179,7 @@ Global.model_GTSeln.Voles <- lmer(RF.Seed ~ Mammal.herb  + HCN + Mammal.herb:HCN
   data = GTSelnData.all.Voles, REML = FALSE)
 
 #Backward model selection of above model
-lmerTest::step(Global.model_GTSeln.Voles, ddf = "kenward-roger", type = 3, alpha.random = 0.1, alpha.fixed = 0.05,
+lmerTest::step(Global.model_GTSeln.Voles, ddf = "Kenward-Roger", type = 3, alpha.random = 0.1, alpha.fixed = 0.05,
               reduce.fixed = TRUE, reduce.random = FALSE, fixed.calc = TRUE, lsmeans.calc = TRUE,
               difflsmeans.calc = TRUE, test.effs = NULL,  keep.effs = "Genotype")
 
@@ -1220,14 +1214,14 @@ top.model.Voles.Dmg <- lm(RF.Seed ~ HCN + Bnr.wdth.S +
   Infl.S + Flwrs.S + HCN:Bnr.wdth.S +
   HCN:Infl.S, data = GTSelnData.all.Voles.Dmg)
 summary(top.model.Voles.Dmg)
-car::Anova(top.model.Voles.Dmg, type = 3, ddf = "kenward-roger")
+car::Anova(top.model.Voles.Dmg, type = 3, ddf = "Kenward-Roger")
 
 #Undamaged by voles
 top.model.Voles.Undmg <- lm(RF.Seed ~ HCN + Bnr.wdth.S +
   Infl.S + Flwrs.S + HCN:Bnr.wdth.S +
   HCN:Infl.S, data = GTSelnData.all.Voles.Undmg)
 summary(top.model.Voles.Undmg)
-car::Anova(top.model.Voles.Undmg, type = 3, ddf = "kenward-roger")
+car::Anova(top.model.Voles.Undmg, type = 3, ddf = "Kenward-Roger")
 
 # Effect size on # of Inflorescences (Damaged vs. Undamaged). 94% weaker.
 (1.21121 - 0.67866)/1.21121
@@ -1372,7 +1366,7 @@ top.model.CYP.Open <- lmer(RF.Seed ~ Herbivory +
                              Herbivory:Infl.S + (1 | Genotype),
                             data = GTSelnData.all.CYP.Open)
 summary(top.model.CYP.Open)
-anova(top.model.CYP.Open, type = 3, ddf = "kenward-roger")
+anova(top.model.CYP.Open, type = 3, ddf = "Kenward-Roger")
 
 #CYP–, Open pollination
 top.model.ACYP.Open <- lmer(RF.Seed ~ Herbivory +
@@ -1381,7 +1375,7 @@ top.model.ACYP.Open <- lmer(RF.Seed ~ Herbivory +
                                Herbivory:Infl.S + (1 | Genotype),
                              data = GTSelnData.all.ACYP.Open)
 summary(top.model.ACYP.Open)
-anova(top.model.ACYP.Open, type = 3, ddf = "kenward-roger")
+anova(top.model.ACYP.Open, type = 3, ddf = "Kenward-Roger")
 
 
 #CYP+, Supplemental pollination
@@ -1391,7 +1385,7 @@ top.model.CYP.Supp <- lmer(RF.Seed ~ Herbivory +
                               Herbivory:Infl.S + (1 | Genotype),
                             data = GTSelnData.all.CYP.Supp)
 summary(top.model.CYP.Supp)
-anova(top.model.CYP.Supp, type = 3, ddf = "kenward-roger")
+anova(top.model.CYP.Supp, type = 3, ddf = "Kenward-Roger")
 
 #CYP–, Supplemental pollination
 top.model.ACYP.Supp <- lmer(RF.Seed ~ Herbivory +
@@ -1400,7 +1394,7 @@ top.model.ACYP.Supp <- lmer(RF.Seed ~ Herbivory +
                                Herbivory:Infl.S + (1 | Genotype),
                              data = GTSelnData.all.ACYP.Supp)
 summary(top.model.ACYP.Supp)
-anova(top.model.ACYP.Supp, type = 3, ddf = "kenward-roger")
+anova(top.model.ACYP.Supp, type = 3, ddf = "Kenward-Roger")
 
 ###########################################
 #### GENOTYPIC SELECTION ANALYSIS: Li ####
