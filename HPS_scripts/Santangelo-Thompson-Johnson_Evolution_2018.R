@@ -907,6 +907,42 @@ summary(final.Global.model_GTSeln)
 final.Global.model_GTSeln_KR <- anova(final.Global.model_GTSeln, type = 3, ddf = "Kenward-Roger")
 final.Global.model_GTSeln_KR
 
+## Confirm robustness of model above (i.e. likelihood of type II error)
+
+# Remove most significant 3-way interaction
+final.Global.model_GTSeln_Drop1 <-lmer(RF.Seed ~ HCN + Pollination + Herbivory +
+      Flwr.date.S + Bnr.ht.S + Bnr.wdth.S + Infl.S +
+      HCN:Pollination + HCN:Herbivory + HCN:Flwr.date.S + Pollination:Flwr.date.S +
+      HCN:Bnr.wdth.S + Herbivory:Bnr.wdth.S + HCN:Bnr.ht.S + Herbivory:Bnr.ht.S +
+      HCN:Infl.S + Herbivory:Infl.S + HCN:Herbivory:Bnr.wdth.S + 
+      HCN:Herbivory:Bnr.ht.S +
+      (1 | Genotype),
+    data = GTSelnData.all)
+# Same interpretation
+anova(final.Global.model_GTSeln_Drop1, type = 3, ddf = "Kenward-Roger")
+
+# Remove next most significant three-way interaction
+final.Global.model_GTSeln_Drop2 <- lmer(RF.Seed ~ HCN + Pollination + Herbivory +
+      Flwr.date.S + Bnr.ht.S + Bnr.wdth.S + Infl.S +
+      HCN:Pollination + HCN:Herbivory + HCN:Flwr.date.S + Pollination:Flwr.date.S +
+      HCN:Bnr.wdth.S + Herbivory:Bnr.wdth.S + HCN:Bnr.ht.S + Herbivory:Bnr.ht.S +
+      HCN:Infl.S + Herbivory:Infl.S + HCN:Herbivory:Bnr.ht.S +
+      (1 | Genotype),
+    data = GTSelnData.all)
+# Same interpretation
+anova(final.Global.model_GTSeln_Drop2, type = 3, ddf = "Kenward-Roger")
+
+# Remove next most significant three-way interaction
+final.Global.model_GTSeln_Drop3 <- lmer(RF.Seed ~ HCN + Pollination + Herbivory +
+      Flwr.date.S + Bnr.ht.S + Bnr.wdth.S + Infl.S +
+      HCN:Pollination + HCN:Herbivory + HCN:Flwr.date.S + Pollination:Flwr.date.S +
+      HCN:Bnr.wdth.S + Herbivory:Bnr.wdth.S + HCN:Bnr.ht.S + Herbivory:Bnr.ht.S +
+      HCN:Infl.S + Herbivory:Infl.S +
+      (1 | Genotype),
+    data = GTSelnData.all)
+# Same interpretation
+anova(final.Global.model_GTSeln_Drop3, type = 3, ddf = "Kenward-Roger")
+
 #Write HCN multivariate selection analysis coefficients to dataset and write to disk
 final.Global.model_GTSeln_OUT <- broom::tidy(final.Global.model_GTSeln)
 final.Global.model_GTSeln_KR_OUT <- broom::tidy(final.Global.model_GTSeln_KR)
