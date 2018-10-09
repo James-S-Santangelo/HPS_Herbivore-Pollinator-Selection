@@ -19,20 +19,42 @@
 # Clear workspace
 rm(list = ls())
 
-# Create checkpoint with package versions on date analysis was performed.
-# Install packages and dependencies in project root.
-# Run using R v.3.4.3.
-# Checkpoint will ask to create directory. Answer 'y'. 
-# Do not proceed with running remaining code until this directory is created.
-library(checkpoint)
-checkpoint("2018-02-10", project = getwd(),
-           checkpointLocation = "./", verbose = TRUE, 
-           forceProject = TRUE)
+# Run to install all packages used throughout project
+# Packrat should have automatically been installed upon opening .Rproj
+# If .Rproj was not used, see commented code below to install packages.
+packrat::restore()
 
-# Confirm that checkpoint worked
-getOption("repos") # SHould return MRAN mirror with date = 2018-02-10
-normalizePath(.libPaths(), winslash = "/") # Should return HPS project .checkpoint path before default system R library path
-installed.packages(.libPaths()[1])[, "Package"] # Show installed packages
+# Check where packages are being loaded from
+normalizePath(.libPaths(), winslash = "/") # Should return libraries in packrat directory
+
+## USE IF PACKRAT PROJECT NOT INITIALIZED ##
+
+# # Install Packrat for dependency management
+# install.packages("packrat")
+# 
+# # Initialize Rproject as packrat project
+# packrat::init(".", infer.dependencies = FALSE)
+# 
+# # Install versions package to install specific versions of packages used in this project
+# install.packages("versions")
+# 
+# # Date on which analyses were run
+# date <- "2018-02-10"
+# 
+# # Install package versions from above date
+# versions::install.dates('Rmisc', date)
+# versions::install.dates('lme4', date)
+# versions::install.dates('lmerTest', date)
+# versions::install.dates('lsmeans', date)
+# versions::install.dates('ggplot2', date)
+# versions::install.dates('broom', date)
+# versions::install.dates('car', date)
+# versions::install.dates('multcompView', date)
+# versions::install.dates('dplyr', date)
+# 
+# # Bind package versions to packrat
+# packrat::status()
+# packrat::snapshot()
 
 #Load required packages
 library(Rmisc)
