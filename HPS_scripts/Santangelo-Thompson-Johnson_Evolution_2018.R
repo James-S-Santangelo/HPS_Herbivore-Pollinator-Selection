@@ -6,9 +6,6 @@
 # Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
 # Journal: Journal of Evolutionary Biology
 # Year: 2018
-# Volume:
-# Issue:
-# Pages:
 
 ###############
 #### SETUP ####
