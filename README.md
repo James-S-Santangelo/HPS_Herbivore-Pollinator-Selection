@@ -1,7 +1,6 @@
-**The manuscript associated with this project has been submitted to _The Journal of Evolutionary Biology_**
-
-# Herbivore and Pollinator-mediated Selection (HPS)
-### Author: James S. Santangelo
+##### Manuscript: Herbivores and plant defenses affect selection on plant reproductive traits more strongly than pollinators
+##### Authors: James S. Santangelo, Ken A. Thompson and Marc T.J. Johnson
+##### Journal: Journal of Evolutionary Biology
 
 ## Background
 
