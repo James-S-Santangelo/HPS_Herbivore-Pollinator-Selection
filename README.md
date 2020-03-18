@@ -4,6 +4,8 @@
 
 This project has been published in the [Journal of Evolutionary Biology](https://www.dropbox.com/s/uapbjktt3x56tqy/Santangelo%2C%20Thompson%2C%20Johnson%20-%202018%20-%20Herbivores%20and%20plant%20defenses%20affect%20selection%20on%20plant%20reproductive%20traits%20more%20strongly%20than%20po.pdf?dl=0)
 
+The data and code for this project are additionally archived on [Dryad](https://datadryad.org/stash/dataset/doi:10.5061/dryad.h6qg003)
+
 ### Abstract
 
 Pollinators and herbivores can both affect the evolutionary diversification of
