@@ -191,8 +191,8 @@ PlotFitxMolxIns<-ggplot(meansFitxMolxIns,aes(x=Insecticide, y=Num.Seeds,shape=Mo
   ng1+theme(legend.title=element_blank())
 
 # Save figures 2A and 2B to current working directory
-ggsave("HPS_figures/Figure.S2A_Biomass.x.Ins.pdf", plot = plotBIOxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S2A_Biomass.x.Ins.pdf", plot = plotBIOxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 ############################################################################
@@ -260,7 +260,7 @@ mass (g)") + ng1.45
 plotSeed.x.Trt
 
 #Save figure S3
-ggsave("HPS_figures/Figure.S3_Fitness.x.Poll.x.Bagged.pdf", plot = plotSeed.x.Trt, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S3_Fitness.x.Poll.x.Bagged.pdf", plot = plotSeed.x.Trt, width = 5, height = 5, unit = "in", dpi = 600)
 
 ###########################
 #### HERBIVORY SURVEYS ####
@@ -338,7 +338,7 @@ plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,s
 plot.Herb.x.Herb_HCN
 
 # Save figures S4 to current working directory
-ggsave("HPS_figures/Figure.S4_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 10, height = 8, unit = "in", dpi = 600)
+ggsave("figures/Figure.S4_Herbivory.x.Insecticide-HCN_Three.Surveys.pdf", plot = plot.Herb.x.Herb_HCN, width = 10, height = 8, unit = "in", dpi = 600)
 
 #######################
 #### FLORAL DAMAGE ####
@@ -367,7 +367,7 @@ plot.Bnr.dmg.x.Herb <- ggplot(means.bnr.dmg,aes(x = Herbivory, y = Avg.bnr.dmg))
 plot.Bnr.dmg.x.Herb
 
 #Save figure S5
-ggsave("HPS_figures/Figure.S5_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S5_Bnr.dmg.x.Herbivory.pdf", plot = plot.Bnr.dmg.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 #####################
 #### VOLE DAMAGE ####
@@ -561,7 +561,7 @@ plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date
   ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 # Save Figure 2D
-ggsave("HPS_figures/Figure.2D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2D_FF.x.Voles.pdf", plot = plot.Flwr.date.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER WIDTH
 
@@ -606,8 +606,8 @@ plot.Bnr.wdth.x.HCN.Poll <- ggplot(means.Bnr.wdth.HCN.Poll,aes(x=HCN, y=Avg.Bnr.
                                        axis.text.x = element_text(face = "bold"))
 
 #Save figures S6 and S7A
-ggsave("HPS_figures/Figure.S6_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S7A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S6_BW.x.Herbivory.pdf", plot = plot.Bnr.wdth.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S7A_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.wdth.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BANNER LENGTH
 
@@ -653,8 +653,8 @@ plot.Bnr.ht.x.HCN.Poll <- ggplot(means.Bnr.ht.HCN.Poll,aes(x=HCN, y=Avg.Bnr.Ht, 
                                      axis.text.x = element_text(face = "bold"))
 
 #Save figures 2A and S7B
-ggsave("HPS_figures/Figure.2A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S7B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2A_BW.x.Herbivory.pdf", plot = plot.Bnr.ht.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S7B_BW.x.Poll.x.HCN.pdf", plot = plot.Bnr.ht.x.HCN.Poll, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## BIOMASS
 
@@ -719,8 +719,8 @@ plot.Biomass.x.Vole <- ggplot(means.Biomass.Vole,aes(x=Voles, y=Biomass.plant))+
   ng1
 
 #Save figures S8 and S9
-ggsave("HPS_figures/Figure.S8_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.S9_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S8_Biomass.x.HCN.Poll.Herb.pdf", plot = plot.Biomass.x.Poll.Herb.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S9_Biomass.x.Voles.pdf", plot = plot.Biomass.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## NUMBER OF INFLORESCENCES
 
@@ -772,8 +772,8 @@ plot.Inflor.x.Vole.HCN <- ggplot(means.Inflor.HCN.Voles,aes(x=Voles, y=Total.Inf
   ng1 + theme(legend.title = element_blank()) + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Save figures 2B and 2E
-ggsave("HPS_figures/Figure.2B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.2E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2B_Inflorescences.x.Herb.pdf", plot = plot.Inflor.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2E_Inflorescences.x.Voles.x.HCN.pdf", plot = plot.Inflor.x.Vole.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 ## NUMBER OF FLOWERS
@@ -834,8 +834,8 @@ plot.TF.x.Vole <- ggplot(means.TF.Vole,aes(x=Voles, y=Total.Seed.mass))+
   ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 #Save figures 2C and 2F
-ggsave("HPS_figures/Figure.2C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.2F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2C_TF.x.Herbivory.pdf", plot = plot.TF.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.2F_TF.x.Voles.pdf", plot = plot.TF.x.Vole, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## SEEDS PER INFLORESCENCE ##
 
@@ -1011,7 +1011,7 @@ PlotInfl.x.HCN <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResid
   ng1 + theme(legend.title = element_blank())
 
 #Save figures 3D
-ggsave("HPS_figures/Figure.3D_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.3D_Sel.Infl.x.HCN.pdf", plot = PlotInfl.x.HCN, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Data subset by herbivory treatment
 GTSelnData.all.Am <- subset(GTSelnData.all, Herbivory == "Ambient")
@@ -1049,7 +1049,7 @@ PlotInfl.x.Herb <- ggplot(GTSelnData.all, aes(x = InflResid, y = InflFitnessResi
   coord_cartesian(ylim = c(-2.3, 2.6)) + scale_y_continuous(breaks = seq(from = -2, to = 2.5, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.3A_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.3A_Sel.Infl.x.Herb.pdf", plot = PlotInfl.x.Herb, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, HERBIVORY TREATMEN AND BANNER LENGTH/WIDTH
 
@@ -1135,8 +1135,8 @@ plotBnr.lgth.Gradients <- ggplot(Bnr.lgth.Gradients, aes(x = HCN, y = Estimate, 
               axis.title.x = element_blank())
 
 #Save figures 4A and 4B
-ggsave("HPS_figures/Figure.4A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.4B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.4A_Sel.BW.x.HCN.x.Herb.pdf", plot = plotBnr.wdth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.4B_Sel.BL.x.HCN.x.Herb.pdf", plot = plotBnr.lgth.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 ## 3-WAY INTERACTION BETWEEN HCN, POLLINATION TREATMENT AND DATE TO FIRST FLOWER
 
@@ -1212,7 +1212,7 @@ plotFlwr.date.Gradients <- ggplot(Flwr.date.Gradients, aes(x = HCN, y = Estimate
               axis.line.x = element_blank(),
               axis.title.x = element_blank())
 
-ggsave("HPS_figures/Figure.S10_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.S10_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradients, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 #############################################
@@ -1346,7 +1346,7 @@ PlotInfl.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = InflResid, y = InflFitn
   coord_cartesian(ylim = c(-1.5, 2.0)) + scale_y_continuous(breaks = seq(from = -2, to = 3.0, by = 0.5)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.3B_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.3B_Sel.Infl.x.Voles.pdf", plot = PlotInfl.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 #Number of flowers Fitness residuals. Add to dataframe
 GTSelnData.all.Voles$FlwrsFitnessResid <- resid(lmer(RF.Seed ~ Mammal.herb + HCN + Bnr.wdth.S +
@@ -1374,7 +1374,7 @@ PlotFlwrs.x.Voles <- ggplot(GTSelnData.all.Voles, aes(x = FlwrsResid, y = FlwrsF
   coord_cartesian(ylim = c(-0.55, 0.5)) + scale_y_continuous(breaks = seq(from = -0.55, to = 0.5, by = 0.2)) +
   ng1 + theme(legend.title = element_blank())
 
-ggsave("HPS_figures/Figure.3C_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
+ggsave("figures/Figure.3C_Sel.Flwrs.x.Voles.pdf", plot = PlotFlwrs.x.Voles, width = 5, height = 5, unit = "in", dpi = 600)
 
 
 
@@ -1596,6 +1596,6 @@ means_AbsVal_Sel <- AgentMedSel %>%
   group_by(Agent) %>%
   summarize(mean = mean(abs(Gradient)))
 
-ggsave("HPS_figures/Figure.5_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
-ggsave("HPS_figures/Figure.5.Inset_ABS_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel_ABS, width = 8, height = 8, unit = "in", dpi = 600)
+ggsave("figures/Figure.5_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel, width = 8, height = 8, unit = "in", dpi = 600)
+ggsave("figures/Figure.5.Inset_ABS_Sel.x.Agent.pdf", plot = plotAgent.Med.Sel_ABS, width = 8, height = 8, unit = "in", dpi = 600)
 
