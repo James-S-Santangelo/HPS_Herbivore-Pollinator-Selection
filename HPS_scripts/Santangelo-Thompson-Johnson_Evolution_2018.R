@@ -83,7 +83,7 @@ CVg <- function(x,y) {
 
 
 #Load data on all plants. Re-name columns, remove dead plants, set contrasts, set factors.
-Experimental.data = "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_Experimental-data.txt"
+Experimental.data = "data-clean/Santangelo-Thompson-Johnson_JEB_2018_Experimental-data.txt"
 datExp <- read.table(Experimental.data, header = T,na.strings=c("NA", "#DIV/0!"), fill = T)
 datExp <- within(datExp, {
   HCN = ifelse(HCN == 0, "No", "Yes")
@@ -147,7 +147,7 @@ ng1.45=theme(aspect.ratio=0.7,panel.background = element_blank(),
 ###############################################################################
 
 #Load insecticide trial dataset
-Insecticide.data = "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_Insecticide-trial.txt"
+Insecticide.data = "data-clean/Santangelo-Thompson-Johnson_JEB_2018_Insecticide-trial.txt"
 datIns <- read.table(Insecticide.data, header=T, fill = T, row.names = NULL)
 
 #Mixed model testing the effects of insecticide and molluscicide on plant biomass
@@ -200,7 +200,7 @@ ggsave("figures/Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width = 5
 ############################################################################
 
 #Load pollinator obervation dataset
-Pollinator.observations = "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_Pollinator-observations.txt"
+Pollinator.observations = "data-clean/Santangelo-Thompson-Johnson_JEB_2018_Pollinator-observations.txt"
 datPoll.obs <- read.table(Pollinator.observations, header = T,
                           fill = T,
                           row.names = NULL,
@@ -859,7 +859,7 @@ rand(PL.model.T.Final)
 
 
 #Dataset for genotypic selection analysis with treatments
-GTseln.data <- "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_GTSelnData-all_ExpTreat.txt"
+GTseln.data <- "data-clean/Santangelo-Thompson-Johnson_JEB_2018_GTSelnData-all_ExpTreat.txt"
 GTSelnData <- read.table(GTseln.data, header = T, fill = T)
 
 
@@ -1220,7 +1220,7 @@ ggsave("figures/Figure.S10_Sel.FF.x.HCN.x.Poll.pdf", plot = plotFlwr.date.Gradie
 #############################################
 
 #Dataset for genotypic selection analysis of vole damage (name = GTSelnData-all_Voles.txt)
-GTseln.Voles <- "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_GTSelnData-all_Voles.txt"
+GTseln.Voles <- "data-clean/Santangelo-Thompson-Johnson_JEB_2018_GTSelnData-all_Voles.txt"
 GTSelnData.all.Voles <- read.table(GTseln.Voles, header = T, fill = T)
 
 GTSelnData.all.Voles <- na.omit(GTSelnData.all.Voles)
