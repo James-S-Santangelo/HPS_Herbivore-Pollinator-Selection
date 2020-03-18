@@ -1,7 +1,7 @@
 ###################################################################
 #### HERBIVORES AND PLANT DEFENSES AFFECT SELECTION ON PLANT ######
 #### REPRODUCTIVE TRAITS MORE STRONGLY THAN POLLINATORS ###########
-#################################################################### 
+####################################################################
 
 # Authors: James S. Santangelo, Ken A. Thompson and Marc T. J. Johnson
 # Journal: Journal of Evolutionary Biology
@@ -32,16 +32,16 @@ normalizePath(.libPaths(), winslash = "/") # Should return libraries in packrat 
 
 # # Install Packrat for dependency management
 # install.packages("packrat")
-# 
+#
 # # Initialize Rproject as packrat project
 # packrat::init(".", infer.dependencies = FALSE)
-# 
+#
 # # Install versions package to install specific versions of packages used in this project
 # install.packages("versions")
-# 
+#
 # # Date on which analyses were run
 # date <- "2018-02-10"
-# 
+#
 # # Install package versions from above date
 # versions::install.dates('Rmisc', date)
 # versions::install.dates('lme4', date)
@@ -52,7 +52,7 @@ normalizePath(.libPaths(), winslash = "/") # Should return libraries in packrat 
 # versions::install.dates('car', date)
 # versions::install.dates('multcompView', date)
 # versions::install.dates('dplyr', date)
-# 
+#
 # # Bind package versions to packrat
 # packrat::status()
 # packrat::snapshot()
@@ -201,9 +201,9 @@ ggsave("HPS_figures/Figure.S2B_Fitness.x.Ins.pdf", plot = PlotFitxMolxIns, width
 
 #Load pollinator obervation dataset
 Pollinator.observations = "HPS_data-clean/Santangelo-Thompson-Johnson_JEB_2018_Pollinator-observations.txt"
-datPoll.obs <- read.table(Pollinator.observations, header = T, 
-                          fill = T, 
-                          row.names = NULL, 
+datPoll.obs <- read.table(Pollinator.observations, header = T,
+                          fill = T,
+                          row.names = NULL,
                           sep = "\t")
 
 #LMM testing for effects of insecticide application on time spent foraging on plants. Control for plant display
@@ -321,14 +321,14 @@ Summary.Herb.x.HCN <- summarySE(datHerb, measurevar = "Damage", groupvar = c("HC
 (11.370633 - 8.408081)/11.370633 # HCN, Late
 (7.563038 - 5.270025)/7.563038 # HCN, Mid
 
-#Figure S4. Plot mean damage across HCN and Herbivory for each survey. 
+#Figure S4. Plot mean damage across HCN and Herbivory for each survey.
 Summary.Herb.x.Herb_HCN$Survey <- as.character(Summary.Herb.x.Herb_HCN$Survey)
 Summary.Herb.x.Herb_HCN$Survey <- factor(Summary.Herb.x.Herb_HCN$Survey, levels=c("Early","Mid","Late"))
 plot.Herb.x.Herb_HCN <- ggplot(Summary.Herb.x.Herb_HCN,aes(x = HCN, y = Damage,shape = Herbivory,fill = Herbivory, group = Herbivory))+
   geom_errorbar(aes(ymin=Damage-se,ymax=Damage+se),width=0.15,size=0.7)+
-  geom_line(size = 1, aes(linetype = Herbivory)) + 
+  geom_line(size = 1, aes(linetype = Herbivory)) +
   geom_point(size = 4.5)+
-  facet_wrap(  ~ Survey) + 
+  facet_wrap(  ~ Survey) +
   xlab("HCN")+ylab("% Herbivore damage")+
   coord_cartesian(ylim = c(1.5,20))+
   scale_y_continuous(breaks = seq(from = 2, to = 20, by = 2))+
@@ -557,7 +557,7 @@ plot.Flwr.date.x.Voles <- ggplot(means.Flwr.date.Vole,aes(x=Voles, y=Flower.date
   geom_errorbar(aes(ymin=Flower.date-se,ymax=Flower.date+se),width=0.15,size=0.7) +
   geom_point(size=5.5) +
   xlab("Vole damage") + ylab("Days to first flower") +
-  coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 4)) + 
+  coord_cartesian(ylim = c(27,45)) + scale_y_continuous(breaks = seq(from = 27, to = 45, by = 4)) +
   ng1 + theme(axis.text.x=element_text(size=17), axis.text.y=element_text(size=17))
 
 # Save Figure 2D
@@ -918,7 +918,7 @@ final.Global.model_GTSeln_Drop1 <-lmer(RF.Seed ~ HCN + Pollination + Herbivory +
       Flwr.date.S + Bnr.ht.S + Bnr.wdth.S + Infl.S +
       HCN:Pollination + HCN:Herbivory + HCN:Flwr.date.S + Pollination:Flwr.date.S +
       HCN:Bnr.wdth.S + Herbivory:Bnr.wdth.S + HCN:Bnr.ht.S + Herbivory:Bnr.ht.S +
-      HCN:Infl.S + Herbivory:Infl.S + HCN:Herbivory:Bnr.wdth.S + 
+      HCN:Infl.S + Herbivory:Infl.S + HCN:Herbivory:Bnr.wdth.S +
       HCN:Herbivory:Bnr.ht.S +
       (1 | Genotype),
     data = GTSelnData.all)
@@ -950,8 +950,8 @@ anova(final.Global.model_GTSeln_Drop3, type = 3, ddf = "Kenward-Roger")
 #Write HCN multivariate selection analysis coefficients to dataset and write to disk
 final.Global.model_GTSeln_OUT <- broom::tidy(final.Global.model_GTSeln)
 final.Global.model_GTSeln_KR_OUT <- broom::tidy(final.Global.model_GTSeln_KR)
-write.csv(final.Global.model_GTSeln_OUT, "HPS_tables/Table-1_Gradients_Multivariate-selection_HCN_Treatments.csv")
-write.csv(final.Global.model_GTSeln_KR_OUT, "HPS_tables/Table-1_Pvals_Multivariate-selection_HCN_Treatments.csv")
+write.csv(final.Global.model_GTSeln_OUT, "tables/Table-1_Gradients_Multivariate-selection_HCN_Treatments.csv")
+write.csv(final.Global.model_GTSeln_KR_OUT, "tables/Table-1_Pvals_Multivariate-selection_HCN_Treatments.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS BASED ON SIGNIFICANT INTERACTIONS FROM ABOVE MODEL ##
 
@@ -1262,8 +1262,8 @@ final.model_GTSeln.Voles_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.model_GTSeln.Voles_OUT <- broom::tidy(final.model_GTSeln.Voles)
 final.model_GTSeln.Voles_KR_OUT <- broom::tidy(final.model_GTSeln.Voles_KR)
-write.csv(final.model_GTSeln.Voles_OUT, "HPS_tables/Table-S5_Gradients_Multivariate-selection_Voles_Treatments.csv")
-write.csv(final.model_GTSeln.Voles_KR_OUT, "HPS_tables/Table-S5_Pvals_Multivariate-selection_Voles_Treatments.csv")
+write.csv(final.model_GTSeln.Voles_OUT, "tables/Table-S5_Gradients_Multivariate-selection_Voles_Treatments.csv")
+write.csv(final.model_GTSeln.Voles_KR_OUT, "tables/Table-S5_Pvals_Multivariate-selection_Voles_Treatments.csv")
 
 ## UNIVARIATE SELECTION GRADIENTS FROM SIGNIFICANT INTERACTION IN GT SELECTION ANALYSIS OF VOLES ##
 
@@ -1410,8 +1410,8 @@ final.Global.model_GTSeln_Ac_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.Global.model_GTSeln_Ac_OUT <- broom::tidy(final.Global.model_GTSeln_Ac)
 final.Global.model_GTSeln_Ac_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Ac_KR)
-write.csv(final.Global.model_GTSeln_Ac_OUT, "HPS_tables/Table-S6_Gradients_Multivariate-selection_Ac_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "HPS_tables/Table-S6_Pvals_Multivariate-selection_Ac_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Ac_OUT, "tables/Table-S6_Gradients_Multivariate-selection_Ac_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Ac_KR_OUT, "tables/Table-S6_Pvals_Multivariate-selection_Ac_Treatments.csv")
 
 ## 3-WAY INTERACTION BETWEEN CYP79D15, POLLINATION AND DATE TO FIRST FLOWER
 
@@ -1483,8 +1483,8 @@ final.Global.model_GTSeln_Li_KR
 #Write HCN multivariate selection analysis coefficients to dataset
 final.Global.model_GTSeln_Li_OUT <- broom::tidy(final.Global.model_GTSeln_Li)
 final.Global.model_GTSeln_Li_KR_OUT <- broom::tidy(final.Global.model_GTSeln_Li_KR)
-write.csv(final.Global.model_GTSeln_Li_OUT, "HPS_tables/Table-S7_Gradients_Multivariate-selection_Li_Treatments.csv")
-write.csv(final.Global.model_GTSeln_Li_KR_OUT, "HPS_tables/Table-S7_Pvals_Multivariate-selection_Li_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Li_OUT, "tables/Table-S7_Gradients_Multivariate-selection_Li_Treatments.csv")
+write.csv(final.Global.model_GTSeln_Li_KR_OUT, "tables/Table-S7_Pvals_Multivariate-selection_Li_Treatments.csv")
 
 ##########################################################
 #### FIGURE SUMMARIZING SELECTION BY DIFFERENT AGENTS ####
