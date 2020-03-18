@@ -1,7 +1,7 @@
 .Rhistory
 .Rproj.user/
 .Rdata
-data-raw/data-processing-scripts/
+scripts/data-processing-scripts/
 .checkpoint/
 .Rproj.user
 scripts/.Rapp.history
