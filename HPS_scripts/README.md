@@ -1,1 +1,0 @@
-The master R script in this folder is used to generate all of the results in the manuscript. All analysis details can be found in the script. Figures are exported to _../figures/_ while table with output from key linear models are exported to _../tables/_.

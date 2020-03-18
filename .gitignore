@@ -1,9 +1,9 @@
 .Rhistory
 .Rproj.user/
 .Rdata
-HPS_data-raw/data-processing-scripts/
+data-raw/data-processing-scripts/
 .checkpoint/
 .Rproj.user
-HPS_scripts/.Rapp.history
+scripts/.Rapp.history
 packrat/lib*/
 packrat/src/
