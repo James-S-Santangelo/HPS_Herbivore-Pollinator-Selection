@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5753112.svg)](https://doi.org/10.5281/zenodo.5753112)
+
 ## Project: Herbivore and Pollinatior-mediated Selection (HPS)
 ### Manuscript: Herbivores and plant defenses affect selection on plant reproductive traits more strongly than pollinators
 #### Authors: James S. Santangelo, Ken A. Thompson and Marc T.J. Johnson
